@@ -4,6 +4,7 @@ import '../landing/landing.css'
 const Landing = () => {
   return (
     <>
+      <h1>Welcome losers</h1>
     </>
   )
 }
