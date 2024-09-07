@@ -43,6 +43,7 @@ const signup = async (formData) => {
 };
 
 const signin = async (user) => {
+  console.log(user);
   try {
     const res = await fetch(`${BASE_URL}/auth/sign-in`, {
       method: "POST",
@@ -51,7 +52,6 @@ const signin = async (user) => {
     });
 
     const json = await res.json();
-
     if (json.error) {
       throw new Error(json.error);
     }
