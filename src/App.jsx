@@ -8,6 +8,8 @@ import SignInForm from "./components/auth/SignInForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import Landing from "./components/landing/Landing";
 import LoadDashboard from "./components/driver/LoadDashboard";
+import OrderDashboard from "./components/admin/orders/OrderDashboard";
+import OrderForm from "./components/admin/orders/OrderForm";
 
 // SERVICES
 import authServices from "./services/auth/authServices";
@@ -32,6 +34,9 @@ function App() {
           : (<>
             {/* PRIVATE ROUTES */}
             <Route path="/drivers/orders" element={<LoadDashboard user={user} />} />
+            <Route path="/admin/orders/OrderDashboard" element={<OrderDashboard user={user} />} />
+            <Route path="/admin/orders/OrderForm" element={<OrderForm user={user} />} />
+
           </>)
         }
 

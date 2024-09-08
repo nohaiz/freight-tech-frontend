@@ -10,9 +10,13 @@ const Navbar = ({ user, handleSignout }) => {
           <Link to="/auth/sign-up">Sign Up</Link>
         </>
       ) : (
+        <>
+          <Link to="/admin/orders/OrderDashboard" className="navbar-item">Orders</Link>
+          <Link to="/admin/orders/OrderForm" className="navbar-item">NEW Order</Link>
         <a onClick={handleSignout} href="/">
           Sign Out
         </a>
+        </>
       )}
     </nav>
   );
