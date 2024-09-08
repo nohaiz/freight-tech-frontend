@@ -6,8 +6,8 @@ const Navbar = ({ user, handleSignout }) => {
     <nav>
       {!user ? (
         <>
-          <Link to="/signin">Sign In</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/auth/sign-in">Sign In</Link>
+          <Link to="/auth/sign-up">Sign Up</Link>
         </>
       ) : (
         <a onClick={handleSignout} href="/">

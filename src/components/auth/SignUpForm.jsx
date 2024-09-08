@@ -63,7 +63,7 @@ const SignUpForm = (prop) => {
         });
       } else {
         prop.setUser(response);
-        navigate("/");
+        navigate(`/${response.role}s/orders`);
       }
     } catch (error) {
       console.error(error);

@@ -4,7 +4,9 @@ const indexDriverOrders = async () => {
   try {
     const res = await fetch(`${BASE_URL}/drivers/orders`, {
       method: 'GET',
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
     const json = await res.json();
     if (json.error) {
@@ -12,7 +14,7 @@ const indexDriverOrders = async () => {
     }
     return json;
   } catch (err) {
-    console.log(err)
+    // console.log(err)
   }
 }
 
