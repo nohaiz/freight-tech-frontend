@@ -14,7 +14,7 @@ const indexDriverOrders = async () => {
     }
     return json;
   } catch (err) {
-    // console.log(err)
+    console.log(err)
   }
 }
 
