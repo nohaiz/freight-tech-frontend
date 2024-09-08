@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import driverServices from '../../../services/orderServices/driverServices'
-const DriverDashboard = (user) => {
+import driverServices from '../../services/driverOrder/driverServices';
+
+const LoadDashboard = (user) => {
 
   const userDisplay = (user.user.role).charAt(0).toUpperCase() + user.user.role.slice(1)
   const [driver, setDriver] = useState([]);
@@ -18,6 +19,7 @@ const DriverDashboard = (user) => {
       }
       fetchDriver();
     }, [])
+
     return (
       <>
         <main>
@@ -25,6 +27,16 @@ const DriverDashboard = (user) => {
             <h1>Welcome {userDisplay}</h1>
           </section>
           <section>
+            <button type="button">View Orders</button>
+            <button type="button">Active Orders</button>
+            <button type="button">Order History</button>
+            {driver.map((order) =>
+              <div key={order.id}>
+                <p>{order.pickupLocation}</p>
+                <p>{order.dropoffLocation}</p>
+                <p>{order.orderStatus}</p>
+              </div>
+            )}
           </section>
         </main>
       </>
@@ -36,4 +48,6 @@ const DriverDashboard = (user) => {
   }
 }
 
-export default DriverDashboard
+export default LoadDashboard
+
+

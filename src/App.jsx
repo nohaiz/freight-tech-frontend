@@ -7,10 +7,10 @@ import Navbar from "./components/nav/Navbar";
 import SignInForm from "./components/auth/SignInForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import Landing from "./components/landing/Landing";
-import DriverDashboard from "./components/order/driver/DriverDashboard";
+import LoadDashboard from "./components/driver/LoadDashboard";
 
 // SERVICES
-import authServices from "./services/authServices";
+import authServices from "./services/auth/authServices";
 
 const handleSignout = () => {
   authServices.signout();
@@ -31,7 +31,7 @@ function App() {
         </>)
           : (<>
             {/* PRIVATE ROUTES */}
-            <Route path="/drivers/orders" element={<DriverDashboard user={user} />} />
+            <Route path="/drivers/orders" element={<LoadDashboard user={user} />} />
           </>)
         }
 

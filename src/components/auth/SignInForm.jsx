@@ -1,7 +1,7 @@
 import "../auth/auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import authServices from "../../services/authServices";
+import authServices from "../../services/auth/authServices";
 
 const SignInForm = (prop) => {
   const [formData, setFormData] = useState({
