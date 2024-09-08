@@ -47,7 +47,7 @@ const SignInForm = (prop) => {
         setErrors({ general: "User data entry invalid. Please try again." });
       } else {
         prop.setUser(response);
-        navigate("/");
+        navigate(`/${response.role}s/orders`);
       }
     } catch (error) {
       console.error(error);

@@ -7,7 +7,7 @@ import Navbar from "./components/nav/Navbar";
 import SignInForm from "./components/auth/SignInForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import Landing from "./components/landing/Landing";
-import Dashboard from "./components/dashboard/Dashboard";
+import DriverDashboard from "./components/order/driver/DriverDashboard";
 
 // SERVICES
 import authServices from "./services/authServices";
@@ -17,8 +17,7 @@ const handleSignout = () => {
   setUser(null);
 };
 function App() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(authServices.getUser());
 
   return (
     <>
@@ -27,13 +26,12 @@ function App() {
         {!user ? (<>
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Landing />} />
-          <Route path="/signin" element={<SignInForm setUser={setUser} />} />
-          <Route path="/signin" element={<SignInForm setUser={setUser} />} />
-          <Route path="/signup" element={<SignUpForm setUser={setUser} />} />
+          <Route path="/auth/sign-in" element={<SignInForm setUser={setUser} />} />
+          <Route path="/auth/sign-up" element={<SignUpForm setUser={setUser} />} />
         </>)
           : (<>
             {/* PRIVATE ROUTES */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/drivers/orders" element={<DriverDashboard user={user} />} />
           </>)
         }
 

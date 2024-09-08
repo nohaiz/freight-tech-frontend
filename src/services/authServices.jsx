@@ -43,7 +43,6 @@ const signup = async (formData) => {
 };
 
 const signin = async (user) => {
-  console.log(user);
   try {
     const res = await fetch(`${BASE_URL}/auth/sign-in`, {
       method: "POST",
