@@ -10,9 +10,12 @@ const Navbar = ({ user, handleSignout }) => {
           <Link to="/auth/sign-up">Sign Up</Link>
         </>
       ) : (
-        <a onClick={handleSignout} href="/">
-          Sign Out
-        </a>
+        <>
+          <Link to={`/${user.role}s/orders`}>Home</Link>
+          <a onClick={handleSignout} href="/">
+            Sign Out
+          </a>
+        </>
       )}
     </nav>
   );

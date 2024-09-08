@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 
-import shipperServices from "../../services/shipperOrder/shipperServices";
+import driverServices from "../../services/driverOrder/driverServices";
 
-const OrderDetails = () => {
+const LoadDetails = ({ user }) => {
   const [orderDetails, setOrderDetails] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const deleteOrder = async () => {
-    await shipperServices.deleteShipperOrder(id);
-    navigate('/shippers/orders')
+  const acceptOrder = async (id) => {
+    orderDetails['driverId'] = user.userId
+    await driverServices.updateDriverOrder(id, orderDetails)
+    navigate('/drivers/orders')
   }
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const shipperData = await shipperServices.shipperOrderDetails(id);
-        setOrderDetails(shipperData)
+        const driverData = await driverServices.driverOrderDetails(id);
+        setOrderDetails(driverData)
       } catch (err) {
         console.log(err);
       }
@@ -27,7 +29,7 @@ const OrderDetails = () => {
   return (
     <>
       <p>Order no: {orderDetails.orderId}</p>
-      <p>Driver: {orderDetails.driverName ? orderDetails.driverName : <>Driver assignment pending</>}</p>
+      <p>Customer: {orderDetails.customerName}</p>
       <p>Pick up location: {orderDetails.pickupLocation}</p>
       <p>Drop off location: {orderDetails.dropoffLocation}</p>
       <p>Order status: {orderDetails.orderStatus}</p>
@@ -37,15 +39,16 @@ const OrderDetails = () => {
       <p>Vehicle type: {orderDetails.vehicleType}</p>
       <p>Delivery time: {orderDetails.deliveryTime}</p>
       <p>Created at: {orderDetails.createdAt}</p>
-      {orderDetails.orderStatus === "pending" ?
-        <>
-          <button type="button" onClick={() => { deleteOrder() }}>Delete Order</button>
+      {!orderDetails.driverId ?
+        <button type="button" onClick={() => { acceptOrder(orderDetails.orderId) }}>Accept Order</button>
+        :
+        orderDetails.orderStatus !== 'completed' ?
           <button button type="button">This is the edit button but its not connected to anything</button>
-        </>
-        : <></>
+          :
+          <></>
       }
     </>
   )
 }
-export default OrderDetails
+export default LoadDetails
 

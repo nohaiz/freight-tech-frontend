@@ -7,9 +7,13 @@ import Navbar from "./components/nav/Navbar";
 import SignInForm from "./components/auth/SignInForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import Landing from "./components/landing/Landing";
+// DRIVER COMPONENTS
 import LoadDashboard from "./components/driver/LoadDashboard";
-import OrdderDashboard from "./components/shipper/OrderDashboard";
-import NewOrder from "./components/shipper/NewOrder";
+import LoadDetails from "./components/driver/LoadDetails";
+// SHIPPER COMPONENTS
+import OrderDashboard from "./components/shipper/OrderDashboard";
+import OrderDetails from "./components/shipper/OrderDetails";
+import NewOrder from "./components/shipper/OrderForm";
 
 // SERVICES
 import authServices from "./services/auth/authServices";
@@ -35,9 +39,12 @@ function App() {
             {/* PRIVATE ROUTES */}
             {/* DRIVER ROUTES */}
             <Route path="/drivers/orders" element={<LoadDashboard user={user} />} />
+            <Route path="/drivers/orders/:id" element={<LoadDetails user={user} />} />
+
             {/* SHIPPER ROUTES */}
-            <Route path="/shippers/orders" element={<OrdderDashboard user={user} />} />
+            <Route path="/shippers/orders" element={<OrderDashboard user={user} />} />
             <Route path="/shippers/orders/new" element={<NewOrder user={user} />} />
+            <Route path="/shippers/orders/:id" element={<OrderDetails />} />
 
           </>)
         }
