@@ -12,6 +12,20 @@ const Navbar = ({ user, handleSignout }) => {
       ) : (
         <>
           <Link to={`/${user.role}s/orders`}>Home</Link>
+          <Link to={`/users/${user.userId}`}>Profile</Link>
+          {user.role === "admin" ? (
+            <>
+              {/* ADMIN ORDERS */}
+              <Link to="/admin/orders/new" className="navbar-item">New Order</Link>
+              {/* ADMIN USERS */}
+              <Link to="/admins/shippers">Shippers</Link>
+              <Link to="/admins/drivers">Drivers</Link>
+              <Link to="/admins/users">Create User</Link>
+              <a onClick={handleSignout} href="/"> Sign Out</a>
+            </>
+          ) : (
+            <></>
+          )}
           <a onClick={handleSignout} href="/">
             Sign Out
           </a>

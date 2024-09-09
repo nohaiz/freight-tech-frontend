@@ -1,6 +1,6 @@
 // import { useState } from "react"
 
-const NewOrder = () => {
+const ShipperOrderForm = () => {
   //   const [formData, setFormData] = useState([])
 
   //   const handleChange = (e) => {
@@ -43,4 +43,4 @@ const NewOrder = () => {
   //   )
 }
 
-export default NewOrder
+export default ShipperOrderForm
