@@ -16,12 +16,21 @@ import OrderDetails from "./components/shipper/OrderDetails";
 import ShipperOrderForm from "./components/shipper/ShipperOrderForm";
 // ADMIN ORDERS COMPONENTS
 import AdminOrderForm from "./components/admin/orders/AdminOrderForm";
+import AdminOrderList from "./components/admin/orders/AdminOrderList";
+import AdminClaimedOrderList from './components/admin/orders/AdminClaimedOrderList';
+import AdminUnClaimedOrderList from './components/admin/orders/AdminUnClaimedOrderList';
+import AdminDriverList from "./components/admin/orders/AdminDriverList";;
+import AdminShipperList from "./components/admin/orders/AdminShipperList";
+import AdminUpdateUserOrderForm from "./components/admin/orders/AdminUpdateUserOrderForm";
+import AdminOrderUserDetails from "./components/admin/orders/AdminOrderUserDetails";
+
 // ADMIN USERS COMPONENTS
 import DriverUserList from "./components/admin/users/DriverUserList";
 import ShipperUserList from "./components/admin/users/ShipperUserList";
 import AdminCreateUserForm from "./components/admin/users/AdminCreateUserForm";
 import AdminUserDetails from "./components/admin/users/AdminUserDetails";
 import AdminUpdateUserForm from "./components/admin/users/AdminUpdateUserForm";
+
 // PROFILE COMPONENTS
 import UserDetails from "./components/profiles/UsersDetails";
 import UsersForm from "./components/profiles/UsersForm";
@@ -78,6 +87,16 @@ function App() {
             <Route path="/shippers/orders/:id" element={<OrderDetails />} />
             {/* ADMIN ORDER ROUTES */}
             <Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />
+            <Route path="/admin/orders" element={<AdminOrderList user={user} />} />
+            <Route path="/admin/orders/claimed" element={<AdminClaimedOrderList user={user} />} />
+            <Route path="/admin/orders/unclaimed" element={<AdminUnClaimedOrderList user={user} />} />
+            <Route path="/admin/orders/drivers" element={<AdminDriverList />} />
+            <Route path="/admin/orders/shippers" element={<AdminShipperList />} />
+            <Route path="/admin/orders/:userId/edit" element={<AdminUpdateUserOrderForm />} />
+            <Route path="/admin/orders/:userId" element={<AdminOrderUserDetails />} />
+
+
+
             {/* ADMIN USERS ROUTES */}
             <Route path="/admins/users" element={<AdminCreateUserForm />} />
             <Route path="/admins/drivers" element={<DriverUserList />} />
