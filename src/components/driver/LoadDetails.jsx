@@ -42,7 +42,7 @@ const LoadDetails = ({ user }) => {
       {!orderDetails.driverId ?
         <button type="button" onClick={() => { acceptOrder(orderDetails.orderId) }}>Accept Order</button>
         :
-        orderDetails.orderStatus !== 'completed' ?
+        orderDetails.orderStatus !== 'completed' && orderDetails.orderStatus !== 'on_route' ?
           <button button type="button">This is the edit button but its not connected to anything</button>
           :
           <></>

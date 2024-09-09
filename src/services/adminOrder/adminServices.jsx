@@ -1,51 +1,23 @@
-const BASE_URL = "http://localhost:5000/admin/orders"; // Ensure this is the correct URL
-
-const adminServices = {
-
-  newAdminOrder: async (orderData) => {
-    try {
-      const response = await fetch(BASE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to create a new order");
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error in newAdminOrder:", error.message);
-      throw error;
-    }
-  },
-};
+const BASE_URL = import.meta.env.VITE_BACK_END_SERVER_URL;
 
 const newAdminOrder = async (orderData) => {
-  const token = localStorage.getItem("token"); 
   try {
-    const response = await fetch(BASE_URL, {
+    const res = await fetch(`${BASE_URL}/admin/orders`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(orderData),
     });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to create a new order");
+    const json = await res.json();
+    if (json.error) {
+      throw new Error(json.error);
     }
-    return await response.json();
+    return json;
   } catch (error) {
-    console.error("Error in newAdminOrder:", error.message);
-    throw error;
+    console.error(error);
   }
-};
+}
 
-export default adminServices;
+export default { newAdminOrder }

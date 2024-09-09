@@ -11,12 +11,11 @@ import Landing from "./components/landing/Landing";
 import LoadDashboard from "./components/driver/LoadDashboard";
 import LoadDetails from "./components/driver/LoadDetails";
 // SHIPPER COMPONENTS
-// import OrderDashboard from "./components/shipper/OrderDashboard";
+import OrderDashboard from "./components/shipper/OrderDashboard";
 import OrderDetails from "./components/shipper/OrderDetails";
 import NewOrder from "./components/shipper/OrderForm";
 // ADMIN COMPONENTS
-import OrderDashboard from "./components/admin/orders/OrderDashboard";
-import OrderForm from "./components/admin/orders/OrderForm";
+import AdminOrderForm from "./components/admin/orders/AdminOrderForm";
 
 // SERVICES
 import authServices from "./services/auth/authServices";
@@ -48,8 +47,7 @@ function App() {
             <Route path="/shippers/orders/new" element={<NewOrder user={user} />} />
             <Route path="/shippers/orders/:id" element={<OrderDetails />} />
             {/* ADMIN ROUTES */}
-            <Route path="/admin/orders/OrderDashboard" element={<OrderDashboard user={user} />} />
-            <Route path="/admin/orders/OrderForm" element={<OrderForm user={user} />} />
+            <Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />
 
           </>)
         }

@@ -4,28 +4,28 @@ import adminServices from "../../../services/adminOrder/adminServices";
 
 const libraries = ["places"];
 
-const OrderForm = () => {
+const AdminOrderForm = () => {
   const [formData, setFormData] = useState({
-    pickupLocation: "",    
-    dropoffLocation: "",   
+    pickupLocation: "",
+    dropoffLocation: "",
     dimensions: "",
-    weightValue: "", 
-    vehicleType: "car",    
-    distance: "",      
-    paymentAmount: "",      
+    weightValue: "",
+    vehicleType: "car",
+    distance: "",
+    paymentAmount: "",
   });
 
   const [directions, setDirections] = useState(null);
   const [distance, setDistance] = useState("");
-  const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 }); // Riyadh coordinates
-  const [paymentAmount, setPaymentAmount] = useState("");  
-  const [pickupAutocomplete, setPickupAutocomplete] = useState(null);  
-  const [dropoffAutocomplete, setDropoffAutocomplete] = useState(null); 
+  const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 });
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [pickupAutocomplete, setPickupAutocomplete] = useState(null);
+  const [dropoffAutocomplete, setDropoffAutocomplete] = useState(null);
 
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries, 
+    libraries,
   });
 
   useEffect(() => {
@@ -88,18 +88,18 @@ const OrderForm = () => {
     } else if (formData.vehicleType.toLowerCase() === "truck") {
       fullPaymentAmount = paymentAmount * 2;
     }
-
     try {
       const response = await adminServices.newAdminOrder({
-        customerId: "1",  
-        driverId: "1",     
-        pickupLocation: formData.pickupLocation,   
-        dropoffLocation: formData.dropoffLocation, 
-        vehicleType: formData.vehicleType,         
+        customerId: "1",
+        driverId: "11",
+        pickupLocation: formData.pickupLocation,
+        dropoffLocation: formData.dropoffLocation,
+        vehicleType: formData.vehicleType,
         dimensions: formData.dimensions,
-        weightValue: formData.weightValue,         
+        weightValue: formData.weightValue,
         orderStatus: "pending",
-        paymentAmount: fullPaymentAmount,           
+        paymentAmount: fullPaymentAmount,
+        deliveryTime: '2024-11-10  '
       });
       console.log("Order created successfully", response);
     } catch (error) {
@@ -256,4 +256,4 @@ const OrderForm = () => {
   );
 };
 
-export default OrderForm;
+export default AdminOrderForm;

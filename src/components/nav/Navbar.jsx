@@ -13,12 +13,16 @@ const Navbar = ({ user, handleSignout }) => {
         <>
           <Link to={`/${user.role}s/orders`}>Home</Link>
           <>
-          <Link to="/admin/orders/OrderDashboard" className="navbar-item">Orders</Link>
-          <Link to="/admin/orders/OrderForm" className="navbar-item">NEW Order</Link>
-        <a onClick={handleSignout} href="/">
-            Sign Out
-          </a>
-        </>
+            {/* <Link to="/admin/orders/OrderDashboard" className="navbar-item">Orders</Link> */}
+            {user.role === 'admin' ?
+              <Link to="/admin/orders/new" className="navbar-item">NEW Order</Link>
+              :
+              <></>
+            }
+            <a onClick={handleSignout} href="/">
+              Sign Out
+            </a>
+          </>
         </>
       )}
     </nav>
