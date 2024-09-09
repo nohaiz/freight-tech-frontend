@@ -1,25 +1,31 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, DirectionsRenderer, useLoadScript, Autocomplete } from "@react-google-maps/api";
+import adminServices from "../../../services/adminOrder/adminServices";
 
-const OrderForm = ({ handleAddOrder }) => {
+const libraries = ["places"];
+
+const OrderForm = () => {
   const [formData, setFormData] = useState({
-    from: "",
-    to: "",
-    vehicle: "car",
+    pickupLocation: "",    
+    dropoffLocation: "",   
     dimensions: "",
-    weight: "",
+    weightValue: "", 
+    vehicleType: "car",    
+    distance: "",      
+    paymentAmount: "",      
   });
 
   const [directions, setDirections] = useState(null);
   const [distance, setDistance] = useState("");
   const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 }); // Riyadh coordinates
-  const [rate, setRate] = useState("");
-  const [fromAutocomplete, setFromAutocomplete] = useState(null);
-  const [toAutocomplete, setToAutocomplete] = useState(null);
+  const [paymentAmount, setPaymentAmount] = useState("");  
+  const [pickupAutocomplete, setPickupAutocomplete] = useState(null);  
+  const [dropoffAutocomplete, setDropoffAutocomplete] = useState(null); 
+
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries, 
   });
 
   useEffect(() => {
@@ -33,28 +39,28 @@ const OrderForm = ({ handleAddOrder }) => {
         },
         (error) => {
           console.error("Error obtaining location:", error);
-          setMapCenter({ lat: 24.7136, lng: 46.6753 }); // Default location
+          setMapCenter({ lat: 24.7136, lng: 46.6753 }); // Default location Riyadh
         }
       );
     }
   }, []);
 
   useEffect(() => {
-    setRate("");
-    if (formData.from && formData.to) {
+    setPaymentAmount("");
+    if (formData.pickupLocation && formData.dropoffLocation) {
       calculateRoute();
     }
-  }, [formData.from, formData.to]);
+  }, [formData.pickupLocation, formData.dropoffLocation]);
 
   useEffect(() => {
     if (distance) {
       const match = distance.match(/[\d,]+(\.\d+)?/);
       if (match) {
         const distanceValueStr = match[0].replace(/,/g, "");
-        const calculatedRate = (distanceValueStr * 1.2).toFixed(3);
-        setRate(calculatedRate);
+        const calculatedPayment = (distanceValueStr * 1.2).toFixed(3);
+        setPaymentAmount(calculatedPayment);
       } else {
-        setRate("");
+        setPaymentAmount("");
       }
     }
   }, [distance]);
@@ -63,10 +69,10 @@ const OrderForm = ({ handleAddOrder }) => {
     setFormData({ ...formData, [evt.target.name]: evt.target.value });
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    if (!formData.weight || isNaN(formData.weight)) {
+    if (!formData.weightValue || isNaN(formData.weightValue)) {
       alert("Please enter a valid weight.");
       return;
     }
@@ -76,24 +82,38 @@ const OrderForm = ({ handleAddOrder }) => {
       return;
     }
 
-    let fullRate = rate;
-    if (formData.vehicle.toLowerCase() === "suv") {
-      fullRate = rate * 1.5;
-    } else if (formData.vehicle.toLowerCase() === "truck") {
-      fullRate = rate * 2;
+    let fullPaymentAmount = paymentAmount;
+    if (formData.vehicleType.toLowerCase() === "suv") {
+      fullPaymentAmount = paymentAmount * 1.5;
+    } else if (formData.vehicleType.toLowerCase() === "truck") {
+      fullPaymentAmount = paymentAmount * 2;
     }
 
-    // Call handleAddOrder passed from the parent component
-    handleAddOrder(formData, fullRate);
+    try {
+      const response = await adminServices.newAdminOrder({
+        customerId: "1",  
+        driverId: "1",     
+        pickupLocation: formData.pickupLocation,   
+        dropoffLocation: formData.dropoffLocation, 
+        vehicleType: formData.vehicleType,         
+        dimensions: formData.dimensions,
+        weightValue: formData.weightValue,         
+        orderStatus: "pending",
+        paymentAmount: fullPaymentAmount,           
+      });
+      console.log("Order created successfully", response);
+    } catch (error) {
+      console.error("Error creating order", error);
+    }
   };
 
   const calculateRoute = () => {
-    if (formData.from && formData.to) {
+    if (formData.pickupLocation && formData.dropoffLocation) {
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
         {
-          origin: formData.from,
-          destination: formData.to,
+          origin: formData.pickupLocation,
+          destination: formData.dropoffLocation,
           travelMode: window.google.maps.TravelMode.DRIVING,
         },
         (result, status) => {
@@ -110,25 +130,25 @@ const OrderForm = ({ handleAddOrder }) => {
     }
   };
 
-  const onLoadFrom = (autocomplete) => {
-    setFromAutocomplete(autocomplete);
+  const onLoadPickup = (autocomplete) => {
+    setPickupAutocomplete(autocomplete);
   };
 
-  const onPlaceChangedFrom = () => {
-    if (fromAutocomplete !== null) {
-      const place = fromAutocomplete.getPlace();
-      setFormData({ ...formData, from: place.formatted_address });
+  const onPlaceChangedPickup = () => {
+    if (pickupAutocomplete !== null) {
+      const place = pickupAutocomplete.getPlace();
+      setFormData({ ...formData, pickupLocation: place.formatted_address });
     }
   };
 
-  const onLoadTo = (autocomplete) => {
-    setToAutocomplete(autocomplete);
+  const onLoadDropoff = (autocomplete) => {
+    setDropoffAutocomplete(autocomplete);
   };
 
-  const onPlaceChangedTo = () => {
-    if (toAutocomplete !== null) {
-      const place = toAutocomplete.getPlace();
-      setFormData({ ...formData, to: place.formatted_address });
+  const onPlaceChangedDropoff = () => {
+    if (dropoffAutocomplete !== null) {
+      const place = dropoffAutocomplete.getPlace();
+      setFormData({ ...formData, dropoffLocation: place.formatted_address });
     }
   };
 
@@ -148,37 +168,37 @@ const OrderForm = ({ handleAddOrder }) => {
       <div id="the-specs">
         {distance && <p>Est Distance: {distance}</p>}
         {distance && (
-          <p>Rate: BD {formData.vehicle === "SUV" ? rate * 1.5 : formData.vehicle === "Truck" ? rate * 2 : rate}</p>
+          <p>Rate: BD {formData.vehicleType === "suv" ? paymentAmount * 1.5 : formData.vehicleType === "truck" ? paymentAmount * 2 : paymentAmount}</p>
         )}
       </div>
 
       <form onSubmit={handleSubmit}>
         <div id="form-container">
           <div>
-            <label htmlFor="from">Pick-up</label>
-            <Autocomplete onLoad={onLoadFrom} onPlaceChanged={onPlaceChangedFrom}>
+            <label htmlFor="pickupLocation">Pick-up</label>
+            <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
               <input
                 placeholder="Pick-up Address"
                 required
                 type="text"
-                name="from"
-                id="from"
-                value={formData.from}
+                name="pickupLocation"
+                id="pickupLocation"
+                value={formData.pickupLocation}
                 onChange={handleChange}
               />
             </Autocomplete>
           </div>
 
           <div>
-            <label htmlFor="to">Dropoff</label>
-            <Autocomplete onLoad={onLoadTo} onPlaceChanged={onPlaceChangedTo}>
+            <label htmlFor="dropoffLocation">Dropoff</label>
+            <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
               <input
                 placeholder="Drop off Address"
                 required
                 type="text"
-                name="to"
-                id="to"
-                value={formData.to}
+                name="dropoffLocation"
+                id="dropoffLocation"
+                value={formData.dropoffLocation}
                 onChange={handleChange}
               />
             </Autocomplete>
@@ -198,26 +218,26 @@ const OrderForm = ({ handleAddOrder }) => {
           </div>
 
           <div>
-            <label htmlFor="weight">Weight</label>
+            <label htmlFor="weightValue">Weight</label>
             <input
               placeholder="Weight"
               required
               type="text"
-              name="weight"
-              id="weight"
-              value={formData.weight}
+              name="weightValue"
+              id="weightValue"
+              value={formData.weightValue}
               onChange={handleChange}
             />
           </div>
 
           <div id="dropdown">
-            <label htmlFor="vehicle">Vehicle type</label>
+            <label htmlFor="vehicleType">Vehicle type</label>
             <span>
               <select
                 required
-                name="vehicle"
-                id="vehicle"
-                value={formData.vehicle}
+                name="vehicleType"
+                id="vehicleType"
+                value={formData.vehicleType}
                 onChange={handleChange}
               >
                 <option value="car">Car</option>
