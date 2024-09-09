@@ -15,7 +15,6 @@ const showUser = async (userId) => {
     }
 
     const data = await res.json();
-    console.log(data.error)
     return data;
   } catch (error) {
     console.error("Failed to fetch user:", error);
