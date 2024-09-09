@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminUser/adminServices";
+import adminServices from "../../../services/adminUser/adminUserServices";
 
 const AdminUserDetails = () => {
   const { userId } = useParams();

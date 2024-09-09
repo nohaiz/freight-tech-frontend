@@ -76,6 +76,7 @@ function App() {
             <Route path="/shippers/orders" element={<OrderDashboard user={user} />} />
             <Route path="/shippers/orders/new" element={<ShipperOrderForm user={user} />} />
             <Route path="/shippers/orders/:id" element={<OrderDetails />} />
+            <Route path="/shippers/orders/:orderId/edit" element={<ShipperOrderForm user={user} />} />
             {/* ADMIN ORDER ROUTES */}
             <Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />
             {/* ADMIN USERS ROUTES */}

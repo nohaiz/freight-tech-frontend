@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminUser/adminServices";
+import adminServices from "../../../services/adminUser/adminUserServices";
 
 const ShipperUserList = () => {
   const [shippers, setShippers] = useState([]);

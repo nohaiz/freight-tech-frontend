@@ -69,19 +69,30 @@ const deleteShipperOrder = async (id) => {
     console.log(err);
   }
 }
+
 const newShipperOrder = async (formData) => {
   try {
     const res = await fetch(`${BASE_URL}/shippers/orders`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'ContentType': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem("token")},`
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
-      body: Json.stringify(formData)
+      body: JSON.stringify(formData),
     });
-  } catch (err) {
-    console.log(err)
+
+    if (!res.ok) {
+      const errorDetails = await res.text();
+      console.error(`Server responded with status ${res.status}: ${errorDetails}`);
+      throw new Error(`Server responded with status ${res.status}: ${errorDetails}`);
+    }
+
+    const json = await res.json();
+    return json;
+  } catch (error) {
+    console.error('Request failed:', error.message);
   }
-}
+};
+
 
 export default { indexShipperOrders, shipperOrderDetails, updateShipperOrder, deleteShipperOrder, newShipperOrder };
