@@ -22,9 +22,9 @@
 
 .sign-up-form-container {
   background-color: black;
-  padding: 25px 40px;
+  padding: 20px 40px;
   border-radius: 8px;
-  max-width: 600px;
+  max-width: 400px;
   margin: auto;
   display: flex;
   flex-direction: column;

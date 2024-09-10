@@ -1,0 +1,42 @@
+.card {
+  background-color: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.card-content {
+  color: #fff;
+}
+
+.media-left .image {
+  background-color: #333;
+  border-radius: 50%;
+}
+
+.content {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.card .title {
+  color: #ffdd57;
+}
+
+.card .subtitle {
+  color: #ffdd57;
+}
+
+.hero.is-small {
+  width: 100vw;
+}
+
+.custom-img img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: none;
+}
+
+.title.is-1 {
+  color: black;
+}

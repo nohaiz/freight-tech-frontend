@@ -1,4 +1,4 @@
-.title.custome-title {
+.title.custom-title {
   font-size: 50px;
   font-weight: 500;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -34,7 +34,7 @@
   flex: 1;
   height: 100%;
   min-height: 200px;
-  background-color: #0909A4;
+  background-color: black;
   margin-left: 20px;
 }
 
@@ -52,14 +52,14 @@
 }
 
 .custom-column {
-  background-color: #3B479D;
+  background-color: black;
 }
 
 .card.custom-card-details {
   flex: 1;
   height: 100%;
   min-height: 200px;
-  background-color: #121258;
+  background-color: black;
   margin-left: 20px;
 }
 

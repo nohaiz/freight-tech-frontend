@@ -22,7 +22,7 @@
   color: white;
   padding: 5px 10px;
   border-radius: 30px;
-  gap: 5px;
+  gap: 10px;
 }
 
 a.navbar-item:hover {

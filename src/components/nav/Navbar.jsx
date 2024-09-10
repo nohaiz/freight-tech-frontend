@@ -6,10 +6,15 @@ const Navbar = ({ user, handleSignout }) => {
     <div className="custom-nav">
       <nav className="navbar-menu">
         {!user ? (
-          <div className="navbar-end">
-            <Link className="navbar-item" to="/auth/sign-in">Sign In</Link>
-            <Link className="navbar-item" to="/auth/sign-up">Sign Up</Link>
-          </div>
+          <>
+            <div className="navbar-start">
+              <Link className="navbar-item" to="/">Home</Link>
+            </div>
+            <div className="navbar-end">
+              <Link className="navbar-item" to="/auth/sign-in">Sign In</Link>
+              <Link className="navbar-item" to="/auth/sign-up">Sign Up</Link>
+            </div>
+          </>
         ) : (
           <>
             <div className="navbar-start">
