@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminOrder/adminServices";
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 
 const AdminDriverList = () => {
   const [drivers, setDrivers] = useState([]);
@@ -9,7 +9,7 @@ const AdminDriverList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const allUsers = await adminServices.indexUsers();
+        const allUsers = await adminOrderServices.indexUsers();
         const driverUsers = allUsers.filter((user) =>
           user.roles.includes("driver")
         );

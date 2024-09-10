@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminOrder/adminServices";
+
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 
 const AdminOrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -9,8 +10,9 @@ const AdminOrderList = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const allOrders = await adminServices.indexOrders();  
+        const allOrders = await adminOrderServices;  
         setOrders(allOrders);
+        console.log(orders)
       } catch (error) {
         console.error("Error fetching orders:", error);
       }

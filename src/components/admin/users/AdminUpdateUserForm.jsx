@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminUser/adminServices";
+import adminServices from "../../../services/adminUser/adminUserServices";
 
 const AdminUpdateUserForm = () => {
   const [user, setUser] = useState({
     username: "",
     email: "",
-    roles: [], // Initialize as an array
+    roles: [],
     verifiedUser: false,
   });
   const [allRoles, setAllRoles] = useState(["admin", "driver", "shipper"]);

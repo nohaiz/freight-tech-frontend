@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./OrderDetail.css";
 
-import orderService from "../../services/orderService";
+import adminOrderServices from "../../services/adminOrderServices";
 
 const AdminOrderDetails = (props) => {
   const { orderId } = useParams();
@@ -10,7 +10,7 @@ const AdminOrderDetails = (props) => {
 
   useEffect(() => {
     async function getOrder() {
-      const orderData = await orderService.show(orderId);
+      const orderData = await adminOrderServices.show(orderId);
       setOrder(orderData);
     }
     getOrder();

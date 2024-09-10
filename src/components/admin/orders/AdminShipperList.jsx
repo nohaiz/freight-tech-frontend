@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminOrder/adminServices";
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 
 const AdminShipperList = () => {
   const [shippers, setShippers] = useState([]);
@@ -9,7 +9,7 @@ const AdminShipperList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const allUsers = await adminServices.indexUsers();  
+        const allUsers = await adminOrderServices.indexUsers();  
         const shipperUsers = allUsers.filter((user) =>
           user.roles.includes("shipper")
         ); 

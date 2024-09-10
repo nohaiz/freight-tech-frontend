@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import shipperServices from "../../services/shipperOrder/shipperServices";
 
@@ -40,7 +40,7 @@ const OrderDetails = () => {
       {orderDetails.orderStatus === "pending" ?
         <>
           <button type="button" onClick={() => { deleteOrder() }}>Delete Order</button>
-          <button button type="button">This is the edit button but its not connected to anything</button>
+          <button type="button"><Link to={`/shippers/orders/${orderDetails.orderId}/edit`}>Edit Order</Link></button>
         </>
         : <></>
       }

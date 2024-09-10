@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminOrder/adminServices";
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 
 const AdminUpdateUserOrderForm = () => {
   const [user, setUser] = useState({
@@ -17,7 +17,7 @@ const AdminUpdateUserOrderForm = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userDetails = await adminServices.showUser(userId);
+        const userDetails = await adminOrderServices.showUser(userId);
         if (userDetails) {
           setUser({
             username: userDetails.username,
@@ -75,7 +75,7 @@ const AdminUpdateUserOrderForm = () => {
         verifiedUser: user.verifiedUser,
       };
 
-      const response = await adminServices.updateUser(userId, updatedUserData);
+      const response = await adminOrderServices.updateUser(userId, updatedUserData);
 
       if (response) {
         const roles = response?.roles || [];

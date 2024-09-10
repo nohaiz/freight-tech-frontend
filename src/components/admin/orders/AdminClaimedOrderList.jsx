@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminOrder/adminServices"; 
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices"; 
 
 const AdminClaimedOrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -9,7 +9,7 @@ const AdminClaimedOrderList = () => {
   useEffect(() => {
     const fetchClaimedOrders = async () => {
       try {
-        const claimedOrders = await adminServices.getClaimedOrders();  
+        const claimedOrders = await adminOrderServices.claimedOrders();  
         setOrders(claimedOrders);
       } catch (error) {
         console.error("Error fetching claimed orders:", error);
@@ -24,7 +24,7 @@ const AdminClaimedOrderList = () => {
 
   const handleDeleteOrder = async (orderId) => {
     try {
-      await adminServices.deleteOrder(orderId);  
+      await adminOrderServices.deleteOrder(orderId);  
       setOrders(orders.filter((order) => order.orderId !== orderId));
     } catch (error) {
       console.error("Error deleting order:", error);

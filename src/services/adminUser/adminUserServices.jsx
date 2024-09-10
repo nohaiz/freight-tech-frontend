@@ -1,7 +1,5 @@
 const BASE_URL = import.meta.env.VITE_BACK_END_SERVER_URL;
 
-// getting all users
-
 const indexUsers = async () => {
   try {
     const res = await fetch(`${BASE_URL}/admins/users`, {

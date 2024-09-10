@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import adminServices from "../../../services/adminUser/adminServices";
-import orderServices from "../../../services/adminOrder/adminServices";  
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
 
 const AdminOrderUserDetails = () => {
   const { userId } = useParams();
@@ -18,10 +17,10 @@ const AdminOrderUserDetails = () => {
 
         if (userDetails?.vehicleType) {
 
-          const availableOrders = await orderServices.getOrdersByVehicleType(userDetails.vehicleType);
+          const availableOrders = await adminOrderServices.getOrdersByVehicleType(userDetails.vehicleType);
           setAssignableOrders(availableOrders);
 
-          const driverOrders = await orderServices.getOrdersByDriver(userId);
+          const driverOrders = await adminOrderServices.getOrdersByDriver(userId);
           setAssignedOrders(driverOrders);
         }
       } catch (error) {
@@ -33,7 +32,7 @@ const AdminOrderUserDetails = () => {
 
   const handleAssignOrder = async (orderId) => {
     try {
-      await orderServices.assignOrderToDriver(orderId, userId);
+      await adminOrderServices.assignOrderToDriver(orderId, userId);
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
       console.error("Error assigning order:", error);
@@ -42,7 +41,7 @@ const AdminOrderUserDetails = () => {
 
   const handleUnassignOrder = async (orderId) => {
     try {
-      await orderServices.unassignOrder(orderId);
+      await adminOrderServices.unassignOrder(orderId);
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
       console.error("Error unassigning order:", error);
@@ -51,7 +50,7 @@ const AdminOrderUserDetails = () => {
 
   return (
     <div>
-      <h1>User Details</h1>
+      <h1>User Order Details</h1>
       {user && (
         <div>
           <p><strong>Username:</strong> {user.username}</p>

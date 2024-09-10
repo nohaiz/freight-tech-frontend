@@ -1,32 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer, useLoadScript, Autocomplete } from "@react-google-maps/api";
-import adminServices from "../../services/adminOrder/adminServices";
+
+import adminUserServices from "../../services/adminUser/adminUserServices";
+import adminOrderServices from "../../services/adminOrder/adminOrderServices";
+import shipperServices from "../../services/shipperOrder/shipperServices";
+import { useParams } from "react-router-dom";
 
 const libraries = ["places"];
 
-const OrderForm = () => {
-
-  const [formData, setFormData] = useState({
-    pickupLocation: "",
-    dropoffLocation: "",
-    dimensions: "",
-    weightValue: "",
-    vehicleType: "car",
-    distance: "",
-    paymentAmount: "",
-  });
+const OrderForm = ({ user }) => {
+  const { orderId } = useParams();
+  const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 });
 
   const [directions, setDirections] = useState(null);
   const [distance, setDistance] = useState("");
-  const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 });
   const [paymentAmount, setPaymentAmount] = useState("");
+
+  const [userData, setUserData] = useState([]);
   const [pickupAutocomplete, setPickupAutocomplete] = useState(null);
   const [dropoffAutocomplete, setDropoffAutocomplete] = useState(null);
 
-
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries,
+  const [formData, setFormData] = useState({
+    customerId: user.role === 'admin' ? "" : user.role === 'shipper' ? `${user.userId}` : "",
+    driverId: user.role === 'admin' ? "" : "null",
+    pickupLocation: "",
+    dropoffLocation: "",
+    vehicleType: "",
+    dimensions: "",
+    weightValue: "",
+    orderStatus: "pending",
+    paymentAmount: "",
+    deliveryTime: ""
   });
 
   useEffect(() => {
@@ -40,75 +44,67 @@ const OrderForm = () => {
         },
         (error) => {
           console.error("Error obtaining location:", error);
-          setMapCenter({ lat: 24.7136, lng: 46.6753 }); // Default location Riyadh
+          setMapCenter({ lat: 24.7136, lng: 46.6753 });
         }
       );
     }
   }, []);
 
   useEffect(() => {
-    setPaymentAmount("");
+    if (orderId) {
+      const fetchOrder = async () => {
+        try {
+          const order = user.role === 'admin'
+            ? await adminOrderServices(orderId)
+            : await shipperServices.shipperOrderDetails(orderId);
+
+          setFormData({
+            ...order,
+            deliveryTime: new Date(order.deliveryTime).toISOString().replace('T', ' ').substring(0, 19),
+          });
+          setDistance(order.distance || "");
+          setPaymentAmount(order.paymentAmount || "");
+          setMapCenter({
+            lat: order.pickupLat || 24.7136,
+            lng: order.pickupLng || 46.6753,
+          });
+        } catch (error) {
+          console.log("Error fetching order:", error);
+        }
+      };
+      fetchOrder();
+    }
+  }, [orderId, user.role]);
+
+  useEffect(() => {
     if (formData.pickupLocation && formData.dropoffLocation) {
       calculateRoute();
     }
-  }, [formData.pickupLocation, formData.dropoffLocation]);
+  }, [formData.pickupLocation, formData.dropoffLocation, formData.vehicleType]);
 
   useEffect(() => {
     if (distance) {
-      const match = distance.match(/[\d,]+(\.\d+)?/);
-      if (match) {
-        const distanceValueStr = match[0].replace(/,/g, "");
-        const calculatedPayment = (distanceValueStr * 1.2).toFixed(3);
-        setPaymentAmount(calculatedPayment);
-      } else {
-        setPaymentAmount("");
-      }
+      updatePaymentAmount();
     }
-  }, [distance]);
+  }, [distance, formData.vehicleType]);
 
-  const handleChange = (evt) => {
-    setFormData({ ...formData, [evt.target.name]: evt.target.value });
-  };
-
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
-
-    if (!formData.weightValue || isNaN(formData.weightValue)) {
-      alert("Please enter a valid weight.");
-      return;
+  if (user.role === 'admin') {
+    if (!orderId) {
+      useEffect(() => {
+        const fetchUser = async () => {
+          try {
+            const userData = await adminUserServices.indexUsers();
+            setUserData(userData);
+          } catch (err) {
+            console.log(err)
+          }
+        }
+        fetchUser();
+      }, [])
     }
+  }
 
-    if (!formData.dimensions || formData.dimensions.trim() === "") {
-      alert("Please enter valid dimensions.");
-      return;
-    }
-
-    let fullPaymentAmount = paymentAmount;
-    if (formData.vehicleType.toLowerCase() === "suv") {
-      fullPaymentAmount = paymentAmount * 1.5;
-    } else if (formData.vehicleType.toLowerCase() === "truck") {
-      fullPaymentAmount = paymentAmount * 2;
-    }
-    try {
-      const response = await adminServices.newAdminOrder({
-        customerId: "1",
-        driverId: "11",
-        pickupLocation: formData.pickupLocation,
-        dropoffLocation: formData.dropoffLocation,
-        vehicleType: formData.vehicleType,
-        dimensions: formData.dimensions,
-        weightValue: formData.weightValue,
-        orderStatus: "pending",
-        paymentAmount: fullPaymentAmount,
-        deliveryTime: '2024-11-10  '
-      });
-      console.log("Order created successfully", response);
-    } catch (error) {
-      console.error("Error creating order", error);
-    }
-  };
-
-  const calculateRoute = () => {
+  const calculateRoute = useCallback(() => {
     if (formData.pickupLocation && formData.dropoffLocation) {
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
@@ -119,39 +115,97 @@ const OrderForm = () => {
         },
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK && result) {
+            const distanceText = result.routes[0]?.legs[0]?.distance?.text;
+            const durationInSeconds = result.routes[0]?.legs[0]?.duration?.value;
+
+            const currentTime = new Date();
+            const arrivalTime = new Date(currentTime.getTime() + durationInSeconds * 1000);
+            const formattedArrivalTime = arrivalTime.toISOString().replace('T', ' ').substring(0, 19);
+
             setDirections(result);
-            const distance = result.routes[0]?.legs[0]?.distance?.text;
-            setDistance(distance || "Distance unavailable");
+            setDistance(distanceText);
+            setFormData(prev => ({ ...prev, deliveryTime: formattedArrivalTime }));
           } else {
-            console.error(`Error fetching directions: ${status}`);
-            setDirections(null);
+            console.log("Error calculating route:", status);
           }
         }
       );
     }
+  }, [formData.pickupLocation, formData.dropoffLocation]);
+
+  const updatePaymentAmount = useCallback(() => {
+    if (distance) {
+      const distanceValue = parseFloat(distance.replace(/[^0-9.]/g, ''));
+      let amount = distanceValue;
+
+      switch (formData.vehicleType) {
+        case 'car':
+          amount *= 1.2;
+          break;
+        case 'suv':
+          amount *= 1.5;
+          break;
+        case 'truck':
+          amount *= 2;
+          break;
+        default:
+          break;
+      }
+
+      setPaymentAmount(amount.toFixed(3));
+    }
+  }, [distance, formData.vehicleType]);
+
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const onLoadPickup = (autocomplete) => {
-    setPickupAutocomplete(autocomplete);
-  };
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    try {
+      if (user.role === 'admin') {
+        if (orderId) {
+          await adminOrderServices.updateAdminOrder(orderId, { ...formData, paymentAmount });
+        } else {
+          await adminOrderServices.newAdminOrder({ ...formData, paymentAmount });
+        }
+      }
+      else {
+        if (orderId) {
+          await shipperServices.updateShipperOrder(orderId, { ...formData, paymentAmount })
+        }
+        else {
+          await shipperServices.newShipperOrder({ ...formData, paymentAmount });
+        }
 
-  const onPlaceChangedPickup = () => {
-    if (pickupAutocomplete !== null) {
-      const place = pickupAutocomplete.getPlace();
-      setFormData({ ...formData, pickupLocation: place.formatted_address });
+      }
+    } catch (error) {
+      console.log("Error submitting order:", error);
     }
   };
 
-  const onLoadDropoff = (autocomplete) => {
-    setDropoffAutocomplete(autocomplete);
+  const onLoadPickup = (autocomplete) => setPickupAutocomplete(autocomplete);
+  const onLoadDropoff = (autocomplete) => setDropoffAutocomplete(autocomplete);
+
+  const onPlaceChangedPickup = () => {
+    if (pickupAutocomplete) {
+      const place = pickupAutocomplete.getPlace();
+      setFormData(prev => ({ ...prev, pickupLocation: place.formatted_address }));
+    }
   };
 
   const onPlaceChangedDropoff = () => {
-    if (dropoffAutocomplete !== null) {
+    if (dropoffAutocomplete) {
       const place = dropoffAutocomplete.getPlace();
-      setFormData({ ...formData, dropoffLocation: place.formatted_address });
+      setFormData(prev => ({ ...prev, dropoffLocation: place.formatted_address }));
     }
   };
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading Maps...</div>;
@@ -166,96 +220,99 @@ const OrderForm = () => {
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
 
-      <div id="the-specs">
-        {distance && <p>Est Distance: {distance}</p>}
-        {distance && (
-          <p>Rate: BD {formData.vehicleType === "suv" ? paymentAmount * 1.5 : formData.vehicleType === "truck" ? paymentAmount * 2 : paymentAmount}</p>
-        )}
-      </div>
-
       <form onSubmit={handleSubmit}>
-        <div id="form-container">
-          <div>
-            <label htmlFor="pickupLocation">Pick-up</label>
-            <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
-              <input
-                placeholder="Pick-up Address"
-                required
-                type="text"
-                name="pickupLocation"
-                id="pickupLocation"
-                value={formData.pickupLocation}
-                onChange={handleChange}
-              />
-            </Autocomplete>
-          </div>
+        {user.role === 'admin' ?
+          <>
+            <label htmlFor="customerId">Shipper</label>
+            <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
+              <option value={"null"}>None</option>
+              {userData.filter(user => user.roles.includes('shipper')).map(user => (
+                <option key={user.userId} value={user.userId}>{user.username}</option>
+              ))}
+            </select>
+            <label htmlFor="driverId">Driver</label>
+            <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
+              <option value={"null"}>None</option>
+              {userData.filter(user => user.roles.includes('driver')).map(user => (
+                <option key={user.userId} value={user.userId}>{user.username}</option>
+              ))}
+            </select>
+          </>
 
-          <div>
-            <label htmlFor="dropoffLocation">Dropoff</label>
-            <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
-              <input
-                placeholder="Drop off Address"
-                required
-                type="text"
-                name="dropoffLocation"
-                id="dropoffLocation"
-                value={formData.dropoffLocation}
-                onChange={handleChange}
-              />
-            </Autocomplete>
-          </div>
+          :
+          <></>
+        }
 
-          <div>
-            <label htmlFor="dimensions">Dimensions</label>
-            <input
-              placeholder="Dimensions"
-              required
-              type="text"
-              name="dimensions"
-              id="dimensions"
-              value={formData.dimensions}
-              onChange={handleChange}
-            />
-          </div>
+        <label htmlFor="pickupLocation">Pick-up</label>
+        <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
+          <input
+            placeholder="Pick-up Address"
+            required
+            type="text"
+            name="pickupLocation"
+            id="pickupLocation"
+            value={formData.pickupLocation}
+            onChange={handleChange}
+          />
+        </Autocomplete>
 
-          <div>
-            <label htmlFor="weightValue">Weight</label>
-            <input
-              placeholder="Weight"
-              required
-              type="text"
-              name="weightValue"
-              id="weightValue"
-              value={formData.weightValue}
-              onChange={handleChange}
-            />
-          </div>
+        <label htmlFor="dropoffLocation">Dropoff</label>
+        <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
+          <input
+            placeholder="Drop off Address"
+            required
+            type="text"
+            name="dropoffLocation"
+            id="dropoffLocation"
+            value={formData.dropoffLocation}
+            onChange={handleChange}
+          />
+        </Autocomplete>
+        <p>Order status: Pending</p>
 
-          <div id="dropdown">
-            <label htmlFor="vehicleType">Vehicle type</label>
-            <span>
-              <select
-                required
-                name="vehicleType"
-                id="vehicleType"
-                value={formData.vehicleType}
-                onChange={handleChange}
-              >
-                <option value="car">Car</option>
-                <option value="suv">SUV</option>
-                <option value="truck">Truck</option>
-              </select>
-            </span>
-          </div>
+        <label htmlFor="weightValue">Weight</label>
+        <input
+          placeholder="Weight"
+          required
+          type="text"
+          name="weightValue"
+          id="weightValue"
+          value={formData.weightValue}
+          onChange={handleChange}
+        />
 
-          <div id="sub-button">
-            <button id="submit" type="submit">SUBMIT</button>
-          </div>
-        </div>
+        <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
+
+        <label htmlFor="dimensions">Dimensions</label>
+        <input
+          placeholder="Dimensions"
+          required
+          type="text"
+          name="dimensions"
+          id="dimensions"
+          value={formData.dimensions}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="vehicleType">Vehicle type</label>
+        <select
+          required
+          name="vehicleType"
+          id="vehicleType"
+          value={formData.vehicleType}
+          onChange={handleChange}
+        >
+          <option value="car">Car</option>
+          <option value="truck">Truck</option>
+          <option value="van">Van</option>
+        </select>
+
+        <p>Delivery time: {formData.deliveryTime || "0"}</p>
+
+        <button id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
       </form>
     </main>
   );
-
 }
 
-export default OrderForm
+export default OrderForm;
