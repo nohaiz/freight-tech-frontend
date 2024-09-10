@@ -1,75 +1,118 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import driverServices from '../../services/driverOrder/driverServices';
 import { Link } from 'react-router-dom';
+import './driver.css';
 
-const LoadDashboard = (user) => {
-
-  const userDisplay = (user.user.role).charAt(0).toUpperCase() + user.user.role.slice(1)
+const LoadDashboard = ({ user }) => {
+  const userDisplay = (user.role).charAt(0).toUpperCase() + user.role.slice(1);
   const [driver, setDriver] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
 
-  if (user.user.role === 'driver') {
+  useEffect(() => {
+    fetchDriver();
+  }, []);
 
-    const fetchDriver = async () => {
-      try {
-        const driverData = await driverServices.indexDriverOrders();
-        setDriver(driverData);
-        setFilteredData(driverData);
-
-      } catch (err) {
-        console.log(err)
-      }
+  const fetchDriver = async () => {
+    try {
+      const driverData = await driverServices.indexDriverOrders();
+      setDriver(sortByOrderId(driverData));
+      setFilteredData(sortByOrderId(driverData));
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const claimedOrders = () => {
-      setFilteredData(driver.filter((status => status.orderStatus === 'pending')))
-    }
-    const orderHistory = () => {
-      setFilteredData(driver.filter((status => status.orderStatus === 'completed')))
-    }
-    const unclaimedOrders = () => {
-      setFilteredData(driver.filter((order => !order.driverId)))
-    }
-    useEffect(() => {
-      fetchDriver();
-    }, [])
+  const sortByOrderId = (data) => {
+    return data.slice().sort((a, b) => a.orderId - b.orderId);
+  };
 
+  const claimedOrders = () => {
+    const filtered = driver.filter((status) => status.orderStatus === 'pending');
+    setFilteredData(sortByOrderId(filtered));
+    setActiveTab('claimed');
+  };
+
+  const orderHistory = () => {
+    const filtered = driver.filter((status) => status.orderStatus === 'completed');
+    setFilteredData(sortByOrderId(filtered));
+    setActiveTab('history');
+  };
+
+  const unclaimedOrders = () => {
+    const filtered = driver.filter((order) => !order.driverId);
+    setFilteredData(sortByOrderId(filtered));
+    setActiveTab('unclaimed');
+  };
+
+  const viewAllOrders = () => {
+    const filtered = driver;
+    setFilteredData(sortByOrderId(filtered));
+    setActiveTab('all');
+  };
+
+  if (user.role === 'driver') {
     return (
       <>
         <main>
           <section>
-            <h1>Welcome {userDisplay}</h1>
+            <h1 class="title has-text-dark custome-title">Welcome {userDisplay}</h1>
             <p>Map Overview should be here</p>
           </section>
           <section>
-            <button type="button" onClick={() => { fetchDriver() }}>View All Orders</button>
-            <button type="button" onClick={() => { unclaimedOrders() }}>Unclaimed Orders</button>
+            <div className="tabs is-centered">
+              <ul>
+                <li className={activeTab === 'all' ? 'is-active' : ''}>
+                  <a onClick={viewAllOrders}>View All Orders</a>
+                </li>
+                <li className={activeTab === 'unclaimed' ? 'is-active' : ''}>
+                  <a onClick={unclaimedOrders}>Unclaimed Orders</a>
+                </li>
+                <li className={activeTab === 'claimed' ? 'is-active' : ''}>
+                  <a onClick={claimedOrders}>Claimed Orders</a>
+                </li>
+                <li className={activeTab === 'history' ? 'is-active' : ''}>
+                  <a onClick={orderHistory}>Order History</a>
+                </li>
+              </ul>
+            </div>
 
-            <button type="button" onClick={() => { claimedOrders() }}>Claimed Orders</button>
-            <button type="button" onClick={() => { orderHistory() }}>Order History</button>
-            {filteredData.length === 0 ? (<p>This section is currently empty. Check back later!</p>
-            ) :
-              filteredData.map((order) =>
-                <Link Link to={`/drivers/orders/${order.orderId}`} >
-                  <div key={order.id}>
-                    <p>Pick up location: {order.pickupLocation}</p>
-                    <p>Drop off location: {order.dropoffLocation}</p>
-                    <p>Order status: {order.orderStatus}</p>
+            {filteredData.length === 0 ? (
+              <p className='title has-text-dark custom-message'>This section is currently empty. Check back later!</p>
+            ) : (
+              <div className="columns is-multiline">
+                {filteredData.map((order) =>
+                  <div className="column is-half" key={order.orderId}>
+                    <div className="card custom-card-details">
+                      <Link to={`/drivers/orders/${order.orderId}`}>
+                        <div className="card-content">
+                          <div className="media">
+                            <div className="media-content">
+                              <p className="title is-3">Order #{order.orderId}</p>
+                            </div>
+                          </div>
+                          <div className="content">
+                            <p className="subtitle is-6"><strong>Pick up location:</strong> {order.pickupLocation}</p>
+                            <p className="subtitle is-6"><strong>Drop off location:</strong> {order.dropoffLocation}</p>
+                            <p className="subtitle is-6"><strong>Order status:</strong> {order.orderStatus}</p>
+                            <p className="subtitle is-6"><strong>Delivery time:</strong> {order.deliveryTime}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
-                </Link>
-              )
-            }
+                )}
+              </div>
+            )}
           </section>
         </main>
       </>
-    )
+    );
   } else {
     return (
-      <h1>Opps, something went wrong</h1>
-    )
+      <h1>Oops, something went wrong</h1>
+    );
   }
-}
+};
 
-export default LoadDashboard
-
-
+export default LoadDashboard;
