@@ -33,6 +33,21 @@ const Navbar = ({ user, handleSignout }) => {
                 <li>
                   <Link to="/admins/users">Create User</Link>
                 </li>
+                <li>
+                  <Link to="/admin/orders/shippers">All Shippers</Link>
+                </li>
+                <li>
+                  <Link to="/admin/orders/drivers">All Drivers</Link>
+                </li>
+                <li>
+                  <Link to="/admin/orders">All Orders</Link>
+                </li>
+                <li>
+                  <Link to="/admin/orders/claimed">Claimed Orders</Link> 
+                </li>
+                <li>
+                  <Link to="/admin/orders/unclaimed">Unclaimed Orders</Link>
+                </li>
               </ul>
             </div>
           ) : (
