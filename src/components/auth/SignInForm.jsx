@@ -58,56 +58,46 @@ const SignInForm = (prop) => {
   };
 
   return (
-    <div className="box">
-      <div className="form-container">
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label className="label">Email:</label>
-            <div className="control has-icons-left">
-              <input
-                className="input"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-              />
-              <span className="icon is-small is-left">
-                <i className="fas fa-envelope"></i>
-              </span>
-            </div>
+    <>
+      <div className="columns is-vcentered">
+        <div className="column">
+          <form onSubmit={handleSubmit} className="form-container">
+            <h1 className="title is-2 has-text-centered">Sign In</h1>
+            {errors.general && <p className="notification is-danger">{errors.general}</p>}
+            <label className="label has-text-white">Email:</label>
+            <input
+              className="input"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+            />
             {errors.email && <p className="help is-danger">{errors.email}</p>}
-          </div>
 
-          <div className="field">
-            <label className="label">Password:</label>
-            <div className="control">
-              <input
-                className="input"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-              />
-            </div>
-            {errors.password && (
-              <p className="help is-danger">{errors.password}</p>
-            )}
-          </div>
+            <label className="label has-text-white">Password:</label>
+            <input
+              className="input"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+            />
+            {errors.password && <p className="help is-danger">{errors.password}</p>}
 
-          <div className="field is-grouped button-container">
-            <div className="control">
-              <button className="button is-link" type="submit">
-                Sign In
-              </button>
-            </div>
-          </div>
-          {errors.general && <p className="help is-danger">{errors.general}</p>}
-        </form>
+            <button className="button has-background-warning" type="submit">Sign In</button>
+
+          </form>
+        </div>
+        <div className="column custom-image">
+          <img src="/illustration.png" alt="illustration" />
+        </div>
       </div>
-    </div>
+    </>
   );
+
+
 };
 
 export default SignInForm;
