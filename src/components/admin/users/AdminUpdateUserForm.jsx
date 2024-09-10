@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import adminServices from "../../../services/adminUser/adminUserServices";
+import "./adminUserForm.css";
 
 const AdminUpdateUserForm = () => {
   const [user, setUser] = useState({
@@ -97,55 +98,92 @@ const AdminUpdateUserForm = () => {
   };
 
   return (
-    <div>
-      <h1>Update User</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={user.username}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Roles:</label>
-          {allRoles.map((role) => (
-            <div key={role}>
-              <input
-                type="checkbox"
-                name="roles"
-                value={role}
-                checked={user.roles.includes(role)}
-                onChange={handleChange}
-              />
-              <label>{role}</label>
+    <>
+      <div className="background">
+        <div className="box">
+          <h1 className="title">Update User</h1>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label className="label">Username:</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="text"
+                  name="username"
+                  value={user.username || ""} // Ensure default value
+                  onChange={handleChange}
+                  placeholder="Enter your username"
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-user"></i>
+                </span>
+              </div>
             </div>
-          ))}
+
+            <div className="field">
+              <label className="label">Email:</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="email"
+                  name="email"
+                  value={user.email || ""} // Ensure default value
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-envelope"></i>
+                </span>
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="label">Roles:</label>
+              <div className="control roles-container">
+                {allRoles.map((role) => (
+                  <label key={role} className="checkbox role-checkbox">
+                    <input
+                      type="checkbox"
+                      name="roles" // Ensure name matches your form handling logic
+                      value={role}
+                      checked={
+                        Array.isArray(user.roles) && user.roles.includes(role)
+                      } // Safeguard against undefined
+                      onChange={handleChange}
+                    />
+                    <span className="role-name">{role}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="label">Verified User:</label>
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="verifiedUser"
+                    checked={user.verifiedUser || false} // Safeguard against undefined
+                    onChange={handleChange}
+                  />
+                  Verified
+                </label>
+              </div>
+            </div>
+
+            <div className="field is-grouped">
+              <div className="control">
+                <button className="button is-link is-dark" type="submit">
+                  Update
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div>
-          <label>Verified User:</label>
-          <input
-            type="checkbox"
-            name="verifiedUser"
-            checked={user.verifiedUser}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Update</button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 };
 

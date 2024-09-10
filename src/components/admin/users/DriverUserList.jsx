@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminServices from "../../../services/adminUser/adminUserServices";
+import "./userList.css";
 const DriverUserList = () => {
   const [drivers, setDrivers] = useState([]);
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const DriverUserList = () => {
           user.roles.includes("driver")
         );
         setDrivers(driverUsers);
-      } catch (error) { }
+      } catch (error) {}
     };
     fetchUsers();
   }, []);
@@ -23,15 +24,16 @@ const DriverUserList = () => {
   };
 
   return (
-    <div>
-      <h1>Driver List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title">Driver List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
             <th>Username</th>
             <th>Email</th>
             <th>Verified User</th>
             <th>Roles</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -42,7 +44,10 @@ const DriverUserList = () => {
               <td>{driver.verifiedUser ? "Yes" : "No"}</td>
               <td>{driver.roles.join(", ")}</td>
               <td>
-                <button onClick={() => handleViewDetails(driver.userId)}>
+                <button
+                  className="button is-info is-dark"
+                  onClick={() => handleViewDetails(driver.userId)}
+                >
                   View Details
                 </button>
               </td>

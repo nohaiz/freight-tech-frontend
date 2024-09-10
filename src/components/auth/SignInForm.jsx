@@ -58,28 +58,55 @@ const SignInForm = (prop) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Email:</label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      {errors.email && <p>{errors.email}</p>}
+    <div className="box">
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label className="label">Email:</label>
+            <div className="control has-icons-left">
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
+              </span>
+            </div>
+            {errors.email && <p className="help is-danger">{errors.email}</p>}
+          </div>
 
-      <label>Password:</label>
-      <input
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {errors.password && <p>{errors.password}</p>}
+          <div className="field">
+            <label className="label">Password:</label>
+            <div className="control">
+              <input
+                className="input"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+              />
+            </div>
+            {errors.password && (
+              <p className="help is-danger">{errors.password}</p>
+            )}
+          </div>
 
-      <button type="submit">Sign In</button>
-      {errors.general && <p>{errors.general}</p>}
-    </form>
+          <div className="field is-grouped button-container">
+            <div className="control">
+              <button className="button is-link" type="submit">
+                Sign In
+              </button>
+            </div>
+          </div>
+          {errors.general && <p className="help is-danger">{errors.general}</p>}
+        </form>
+      </div>
+    </div>
   );
 };
 

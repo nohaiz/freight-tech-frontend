@@ -1,0 +1,55 @@
+.box {
+  background: linear-gradient(to right, #ffffff, #f7f7f7);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  max-width: 600px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.user-details p {
+  margin: 5px 0;
+}
+
+.user-details strong {
+  color: #333;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+}
+
+.button.is-link {
+  background-color: #1e90ff;
+}
+
+.button.is-dark {
+  background-color: #333;
+}
+
+.button.is-danger {
+  background-color: #d9534f;
+}
