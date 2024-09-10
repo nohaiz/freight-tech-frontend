@@ -60,7 +60,7 @@ const LoadDashboard = ({ user }) => {
             <p>Map Overview should be here</p>
           </section>
           <section>
-            <div className="tabs is-boxed is-centered">
+            <div className="tabs is-centered">
               <ul>
                 <li className={activeTab === 'all' ? 'is-active' : ''}>
                   <a onClick={viewAllOrders}>View All Orders</a>
@@ -81,31 +81,31 @@ const LoadDashboard = ({ user }) => {
               <p className='title has-text-dark custom-message'>This section is currently empty. Check back later!</p>
             ) : (
               <div className="columns is-multiline">
-                {filteredData.map((order) => (
-                  <div className="column is-half" key={order.id}>
-                    <div className="card custom-card">
+                {filteredData.map((order) =>
+                  <div className="column is-half" key={order.orderId}>
+                    <div className="card custom-card-details">
                       <Link to={`/drivers/orders/${order.orderId}`}>
                         <div className="card-content">
                           <div className="media">
                             <div className="media-content">
-                              <p className="title is-4">Order #{order.orderId}</p>
+                              <p className="title is-3">Order #{order.orderId}</p>
                             </div>
                           </div>
                           <div className="content">
-                            <p><strong>Pick up location:</strong> {order.pickupLocation}</p>
-                            <p><strong>Drop off location:</strong> {order.dropoffLocation}</p>
-                            <p><strong>Order status:</strong> {order.orderStatus}</p>
+                            <p className="subtitle is-6"><strong>Pick up location:</strong> {order.pickupLocation}</p>
+                            <p className="subtitle is-6"><strong>Drop off location:</strong> {order.dropoffLocation}</p>
+                            <p className="subtitle is-6"><strong>Order status:</strong> {order.orderStatus}</p>
+                            <p className="subtitle is-6"><strong>Delivery time:</strong> {order.deliveryTime}</p>
                           </div>
                         </div>
                       </Link>
                     </div>
                   </div>
-                ))}
+                )}
               </div>
-
             )}
-          </section >
-        </main >
+          </section>
+        </main>
       </>
     );
   } else {

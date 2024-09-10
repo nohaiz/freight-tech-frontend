@@ -57,16 +57,8 @@ const LoadDetails = ({ user }) => {
                 >
                   Accept Order
                 </button>
-              ) : (
-                orderDetails.orderStatus !== 'completed' && orderDetails.orderStatus !== 'on_route' && (
-                  <button
-                    className="button is-warning is-fullwidth"
-                    type="button"
-                  >
-                    Edit Order
-                  </button>
-                )
-              )}
+              ) : (<></>)
+              }
             </div>
           </div>
         </section>
