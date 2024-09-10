@@ -25,27 +25,51 @@ const OrderDetails = () => {
   }, [id]);
 
   return (
-    <>
-      <p>Order no: {orderDetails.orderId}</p>
-      <p>Driver: {orderDetails.driverName ? orderDetails.driverName : <>Driver assignment pending</>}</p>
-      <p>Pick up location: {orderDetails.pickupLocation}</p>
-      <p>Drop off location: {orderDetails.dropoffLocation}</p>
-      <p>Order status: {orderDetails.orderStatus}</p>
-      <p>Weight value: {orderDetails.weightValue}</p>
-      <p>Dimensions: {orderDetails.dimensions}</p>
-      <p>Payment amount: {orderDetails.paymentAmount}</p>
-      <p>Vehicle type: {orderDetails.vehicleType}</p>
-      <p>Delivery time: {orderDetails.deliveryTime}</p>
-      <p>Created at: {orderDetails.createdAt}</p>
-      {orderDetails.orderStatus === "pending" ?
-        <>
-          <button type="button" onClick={() => { deleteOrder() }}>Delete Order</button>
-          <button type="button"><Link to={`/shippers/orders/${orderDetails.orderId}/edit`}>Edit Order</Link></button>
-        </>
-        : <></>
-      }
-    </>
-  )
-}
+    <div className="full-height">
+      <div className="container mt-5">
+        <h1 className="title has-text-dark custom-title-details">Order Details</h1>
+        <section className="card custom-card-details">
+          <div className="card-content">
+            <div className="columns is-mobile is-multiline">
+              <div className="column is-half">
+                <p className="subtitle is-5"><strong>Order no:</strong> {orderDetails.orderId}</p>
+                <p className="subtitle is-5"><strong>Driver:</strong> {orderDetails.driverName ? orderDetails.driverName : <>Driver assignment pending</>}</p>
+                <p className="subtitle is-5"><strong>Pick up location:</strong>  {orderDetails.pickupLocation}</p>
+                <p className="subtitle is-5"><strong>Drop off location:</strong>  {orderDetails.dropoffLocation}</p>
+                <p className="subtitle is-5"><strong>Order status:</strong>  {orderDetails.orderStatus}</p>
+              </div>
+              <div className="column is-half">
+                <p className="subtitle is-5"><strong>Weight value:</strong>  {orderDetails.weightValue}</p>
+                <p className="subtitle is-5"><strong>Dimensions:</strong>  {orderDetails.dimensions}</p>
+                <p className="subtitle is-5"><strong>Payment amount:</strong>  {orderDetails.paymentAmount}</p>
+                <p className="subtitle is-5"><strong>Vehicle type:</strong>  {orderDetails.vehicleType}</p>
+                <p className="subtitle is-5"><strong>Delivery time:</strong>  {orderDetails.deliveryTime}</p>
+                <p className="subtitle is-5"><strong>Created at:</strong>  {orderDetails.createdAt}</p>
+              </div>
+            </div>
+            <div className="buttons mt-4">
+              {orderDetails.orderStatus === "pending" ?
+                <>
+                  <button
+                    type="button"
+                    onClick={() => { deleteOrder() }}
+                    className="button is-danger is-fullwidth mr-2"
+                  >
+                    Delete Order
+                  </button>
+                  <Link to={`/shippers/orders/${orderDetails.orderId}/edit`} className="button is-info is-fullwidth">
+                    Edit Order
+                  </Link>
+                </>
+                : <></>
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
 export default OrderDetails
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminServices from "../../../services/adminUser/adminUserServices";
+import "./userList.css";
 
 const ShipperUserList = () => {
   const [shippers, setShippers] = useState([]);
@@ -26,15 +27,16 @@ const ShipperUserList = () => {
   };
 
   return (
-    <div>
-      <h1>Shipper List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title">Shipper List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
             <th>Username</th>
             <th>Email</th>
             <th>Verified User</th>
             <th>Roles</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +47,10 @@ const ShipperUserList = () => {
               <td>{shipper.verifiedUser ? "Yes" : "No"}</td>
               <td>{shipper.roles.join(", ")}</td>
               <td>
-                <button onClick={() => handleViewDetails(shipper.userId)}>
+                <button
+                  className="button is-dark "
+                  onClick={() => handleViewDetails(shipper.userId)}
+                >
                   View Details
                 </button>
               </td>
