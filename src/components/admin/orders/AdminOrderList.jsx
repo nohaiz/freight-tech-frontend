@@ -21,12 +21,12 @@ const AdminOrderList = () => {
   }, []);
 
   const handleViewDetails = (orderId) => {
-    navigate(`/admin/orders/${orderId}`);
+    navigate(`/admin/orders/${orderId}/details`);
   };
-
+  
   const handleDeleteOrder = async (orderId) => {
     try {
-      await adminServices.deleteOrder(orderId);  
+      await adminOrderServices.deleteOrder(orderId);  
       setOrders(orders.filter((order) => order.orderId !== orderId));
     } catch (error) {
       console.error("Error deleting order:", error);

@@ -142,7 +142,7 @@ const OrderForm = ({ user }) => {
         case 'car':
           amount *= 1.2;
           break;
-        case 'suv':
+        case 'van':
           amount *= 1.5;
           break;
         case 'truck':

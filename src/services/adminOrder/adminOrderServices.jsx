@@ -84,25 +84,6 @@ const indexOrders = async () => {
   }
 };
 
-const updateUser = async (userId, formData) => {
-  try {
-    const res = await fetch(`${BASE_URL}/admins/users/${userId}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const json = await res.json();
-    if (json.error) {
-      throw new Error(json.error);
-    }
-    return json;
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 // getting a single user
 
@@ -128,22 +109,44 @@ const showUserOrders = async (userId) => {
   }
 };
 
-
-const claimedOrders = async () => {
+const deleteOrder = async (orderId) => {
   try {
-    const res = await fetch(`${BASE_URL}/admin/orders/claimed`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    const res = await fetch(`${BASE_URL}/admin/orders/${orderId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     });
-    const json = await res.json()
-    if (json.error) {
-      throw new Error(json.error)
-    }
-    return json;
-  }
-  catch (err) {
-    console.log(err)
-  }
-}
 
-export default { indexOrders, showUserOrders,  updateUser, newAdminOrder, updateAdminOrder, adminOrderDetails, claimedOrders }
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to delete order:", error);
+    throw error;
+  }
+};
+
+const getAllDrivers = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/drivers`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch drivers.");
+    }
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+
+export default { getAllDrivers, indexOrders, showUserOrders, newAdminOrder, updateAdminOrder, adminOrderDetails, deleteOrder, }

@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminOrderServices from "../../../services/adminOrder/adminOrderServices"; 
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
 
 const AdminClaimedOrderList = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchClaimedOrders = async () => {
+    const fetchOrders = async () => {
       try {
-        const claimedOrders = await adminOrderServices.claimedOrders();  
+        const allOrders = await adminOrderServices.indexOrders();
+        const claimedOrders = allOrders.filter(order => order.driverId);  
         setOrders(claimedOrders);
+        console.log(claimedOrders);
       } catch (error) {
-        console.error("Error fetching claimed orders:", error);
+        console.error("Error fetching orders:", error);
       }
     };
-    fetchClaimedOrders();
+    fetchOrders();
   }, []);
 
   const handleViewDetails = (orderId) => {
-    navigate(`/admin/orders/${orderId}`);
+    navigate(`/admin/orders/${orderId}/details`);
   };
 
   const handleDeleteOrder = async (orderId) => {

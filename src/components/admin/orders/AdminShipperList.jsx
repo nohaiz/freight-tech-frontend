@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
+import adminUserServices from "../../../services/adminUser/adminUserServices";
 
 const AdminShipperList = () => {
   const [shippers, setShippers] = useState([]);
@@ -9,7 +9,7 @@ const AdminShipperList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const allUsers = await adminOrderServices.indexUsers();  
+        const allUsers = await adminUserServices.indexUsers();  
         const shipperUsers = allUsers.filter((user) =>
           user.roles.includes("shipper")
         ); 
@@ -22,8 +22,8 @@ const AdminShipperList = () => {
   }, []);
 
   
-  const handleViewOrders = (shipperId) => {
-    navigate(`/admin/orders?shipperId=${shipperId}`); 
+  const handleViewOrders = (userId) => {
+    navigate(`/admin/orders?userId=${userId}`); 
   };
 
   return (
@@ -35,7 +35,6 @@ const AdminShipperList = () => {
             <th>Username</th>
             <th>Email</th>
             <th>Verified User</th>
-            <th>Role</th>
             <th>Actions</th> 
           </tr>
         </thead>
@@ -45,7 +44,6 @@ const AdminShipperList = () => {
               <td>{shipper.username}</td>
               <td>{shipper.email}</td>
               <td>{shipper.verifiedUser ? "Yes" : "No"}</td>
-              <td>{shipper.roles.join(", ")}</td>
               <td>
                 <button onClick={() => handleViewOrders(shipper.userId)}>
                   View Orders

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
+import adminUserServices from "../../../services/adminUser/adminUserServices";
 
 const AdminDriverList = () => {
   const [drivers, setDrivers] = useState([]);
@@ -9,7 +9,7 @@ const AdminDriverList = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const allUsers = await adminOrderServices.indexUsers();
+        const allUsers = await adminUserServices.indexUsers();
         const driverUsers = allUsers.filter((user) =>
           user.roles.includes("driver")
         );
@@ -34,7 +34,6 @@ const AdminDriverList = () => {
             <th>Username</th>
             <th>Email</th>
             <th>Verified User</th>
-            <th>Role</th>
             <th>Vehicle Type</th> 
             <th>Actions</th>
           </tr>
@@ -45,7 +44,6 @@ const AdminDriverList = () => {
               <td>{driver.username}</td>
               <td>{driver.email}</td>
               <td>{driver.verifiedUser ? "Yes" : "No"}</td>
-              <td>{driver.roles.join(", ")}</td>
               <td>{driver.vehicleType ? driver.vehicleType.join(", ") : "N/A"}</td>
               <td>
                 <button onClick={() => handleViewOrderDetails(driver.userId)}>

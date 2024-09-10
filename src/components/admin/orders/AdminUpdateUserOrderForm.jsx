@@ -9,11 +9,7 @@ const AdminUpdateUserOrderForm = () => {
     roles: [], 
     verifiedUser: false,
   });
-  const [allRoles, setAllRoles] = useState(["admin", "driver", "shipper"]);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const { userId } = useParams();
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {

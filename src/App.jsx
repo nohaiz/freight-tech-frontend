@@ -23,6 +23,7 @@ import AdminDriverList from "./components/admin/orders/AdminDriverList";;
 import AdminShipperList from "./components/admin/orders/AdminShipperList";
 import AdminUpdateUserOrderForm from "./components/admin/orders/AdminUpdateUserOrderForm";
 import AdminOrderUserDetails from "./components/admin/orders/AdminOrderUserDetails";
+import AdminUserOrderDetails from "./components/admin/orders/AdminUserOrderDetails";
 
 // ADMIN USERS COMPONENTS
 import DriverUserList from "./components/admin/users/DriverUserList";
@@ -95,7 +96,7 @@ function App() {
             <Route path="/admin/orders/shippers" element={<AdminShipperList />} />
             <Route path="/admin/orders/:userId/edit" element={<AdminUpdateUserOrderForm />} />
             <Route path="/admin/orders/:userId" element={<AdminOrderUserDetails />} />
-
+            <Route path="/admin/orders/:orderId/details" element={<AdminUserOrderDetails />} />
 
 
             {/* ADMIN USERS ROUTES */}
