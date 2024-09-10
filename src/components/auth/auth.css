@@ -1,0 +1,30 @@
+.box {
+  background: linear-gradient(to right, #d4d4d4e8, #414141);
+  border-radius: 8px;
+  color: #000000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 10%;
+}
+
+label.label {
+  display: flex;
+  justify-content: center;
+  color: black;
+}
+
+div.control {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+div.field.is-grouped {
+  display: flex;
+  justify-content: center;
+}

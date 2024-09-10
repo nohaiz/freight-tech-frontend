@@ -82,66 +82,127 @@ const SignUpForm = (prop) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>Username</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-        />
-        {errors.username && <p>{errors.username}</p>}
+      <div className="background">
+        <div className="box">
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label className="label">Username</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="Enter your username"
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-user"></i>
+                </span>
+              </div>
+              {errors.username && (
+                <p className="help is-danger">{errors.username}</p>
+              )}
+            </div>
 
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        {errors.email && <p>{errors.email}</p>}
+            <div className="field">
+              <label className="label">Email</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-envelope"></i>
+                </span>
+              </div>
+              {errors.email && <p className="help is-danger">{errors.email}</p>}
+            </div>
 
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        {errors.password && <p>{errors.password}</p>}
+            <div className="field">
+              <label className="label">Password</label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                />
+              </div>
+              {errors.password && (
+                <p className="help is-danger">{errors.password}</p>
+              )}
+            </div>
 
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+            <div className="field">
+              <label className="label">Confirm Password</label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="help is-danger">{errors.confirmPassword}</p>
+              )}
+            </div>
 
-        <label>Are you a Shipper?</label>
-        <input
-          type="radio"
-          name="verifiedUser"
-          value={true}
-          checked={formData.verifiedUser === true}
-          onChange={() => setFormData({ ...formData, verifiedUser: true })}
-        />
-        <label>Yes</label>
+            <div className="field">
+              <label className="label">Are you a Shipper?</label>
+              <div className="control">
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="verifiedUser"
+                    value={true}
+                    checked={formData.verifiedUser === true}
+                    onChange={() =>
+                      setFormData({ ...formData, verifiedUser: true })
+                    }
+                  />
+                  Yes
+                </label>
+                <label className="radio">
+                  <input
+                    type="radio"
+                    name="verifiedUser"
+                    value={false}
+                    checked={formData.verifiedUser === false}
+                    onChange={() =>
+                      setFormData({ ...formData, verifiedUser: false })
+                    }
+                  />
+                  No
+                </label>
+              </div>
+              {errors.verifiedUser && (
+                <p className="help is-danger">{errors.verifiedUser}</p>
+              )}
+            </div>
 
-        <input
-          type="radio"
-          name="verifiedUser"
-          value={false}
-          checked={formData.verifiedUser === false}
-          onChange={() => setFormData({ ...formData, verifiedUser: false })}
-        />
-        <label>No</label>
-        {errors.verifiedUser && <p>{errors.verifiedUser}</p>}
-
-        <button type="submit">Sign Up</button>
-        {errors.general && <p>{errors.general}</p>}
-      </form>
+            <div className="field is-grouped">
+              <div className="control">
+                <button className="button is-link is-dark " type="submit">
+                  Sign Up
+                </button>
+              </div>
+            </div>
+            {errors.general && (
+              <p className="help is-danger">{errors.general}</p>
+            )}
+          </form>
+        </div>
+      </div>
     </>
   );
 };

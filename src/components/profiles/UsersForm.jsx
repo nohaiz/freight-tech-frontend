@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import profileServices from "../../services/user/profileServices";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./userForm.css";
 
 const UsersForm = () => {
   const { userId } = useParams();
@@ -54,30 +55,52 @@ const UsersForm = () => {
   };
 
   return (
-    <>
-      <div>
-        <h1>Edit User</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-          <button type="submit">Update</button>
-        </form>
-      </div>
-    </>
+    <div className="box">
+      <h1 className="title">Edit User</h1>
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="field">
+          <label className="label" htmlFor="email">
+            Email
+          </label>
+          <div className="control">
+            <input
+              className="input"
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+            />
+          </div>
+        </div>
+
+        <div className="field">
+          <label className="label" htmlFor="username">
+            Username
+          </label>
+          <div className="control">
+            <input
+              className="input"
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Enter your username"
+            />
+          </div>
+        </div>
+
+        <div className="field is-grouped">
+          <div className="control">
+            <button className="button is-link" type="submit">
+              Update
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 
