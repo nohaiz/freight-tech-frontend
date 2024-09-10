@@ -62,9 +62,9 @@ const adminOrderDetails = async (id) => {
 
 // getting all users
 
-const indexUsers = async () => {
+const indexOrders = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/admins/users`, {
+    const res = await fetch(`${BASE_URL}/admin/orders`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -79,7 +79,7 @@ const indexUsers = async () => {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Failed to fetch users:", error);
+    console.error("Failed to fetch orders:", error);
     throw error;
   }
 };
@@ -146,4 +146,4 @@ const claimedOrders = async () => {
   }
 }
 
-export default { indexUsers, showUserOrders,  updateUser, newAdminOrder, updateAdminOrder, adminOrderDetails, claimedOrders }
+export default { indexOrders, showUserOrders,  updateUser, newAdminOrder, updateAdminOrder, adminOrderDetails, claimedOrders }

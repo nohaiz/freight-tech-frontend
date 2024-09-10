@@ -10,7 +10,7 @@ const AdminOrderList = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const allOrders = await adminOrderServices;  
+        const allOrders = await adminOrderServices.indexOrders();  
         setOrders(allOrders);
         console.log(orders)
       } catch (error) {
