@@ -2,7 +2,7 @@ import '../landing/landing.css';
 
 const Landing = () => {
   return (
-    <section className="columns is-vcentered">
+    <section className="column is-vcentered">
       <section className="hero is-small">
         <div className="hero-body">
           <h1 className="title is-1">Freight Tech</h1>

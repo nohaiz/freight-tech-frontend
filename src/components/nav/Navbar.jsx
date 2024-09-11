@@ -18,7 +18,7 @@ const Navbar = ({ user, handleSignout }) => {
         ) : (
           <>
             <div className="navbar-start">
-              <Link className="navbar-item" to={`/${user.role}s/orders`}>Home</Link>
+              <Link className="navbar-item" to={`/${user.role}s/orders`}>Dashboard</Link>
               <Link className="navbar-item" to={`/users/${user.userId}`}>Profile</Link>
             </div>
             <div className="navbar-end">
