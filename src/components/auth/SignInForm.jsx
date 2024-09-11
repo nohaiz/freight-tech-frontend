@@ -62,7 +62,7 @@ const SignInForm = (prop) => {
       <div className="columns is-vcentered">
         <div className="column">
           <form onSubmit={handleSubmit} className="form-container">
-            <h1 className="title is-2 has-text-centered">Sign In</h1>
+            <h1 className="title is-2 has-text-centered custom-title">Sign In</h1>
             {errors.general && <p className="notification is-danger">{errors.general}</p>}
             <label className="label has-text-white">Email:</label>
             <input

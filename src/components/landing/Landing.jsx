@@ -11,8 +11,8 @@ const Landing = () => {
       <div className="container">
         <div className="columns is-centered">
           <div className="column is-one-third">
-            <div className="card">
-              <div className="card-content">
+            <div className="card custom-card">
+              <div className="card-content custom-content">
                 <div className="media">
                   <div className="media-left">
                     <figure className="image is-64x64">
