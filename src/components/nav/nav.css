@@ -34,3 +34,7 @@ a.navbar-item:focus {
   background-color: white;
   color: black;
 }
+
+ul {
+  display: flex;
+}

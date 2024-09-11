@@ -21,11 +21,6 @@ const Navbar = ({ user, handleSignout }) => {
               <Link className="navbar-item" to={`/${user.role}s/orders`}>Dashboard</Link>
               <Link className="navbar-item" to={`/users/${user.userId}`}>Profile</Link>
             </div>
-            <div className="navbar-end">
-              <a className="navbar-item" onClick={handleSignout} href="/" style={{ cursor: 'pointer' }}>
-                Sign Out
-              </a>
-            </div>
             {user.role === "admin" && (
               <div className="navbar-start">
                 <ul>
@@ -52,6 +47,11 @@ const Navbar = ({ user, handleSignout }) => {
                 </ul>
               </div>
             )}
+            <div className="navbar-end">
+              <a className="navbar-item" onClick={handleSignout} href="/" style={{ cursor: 'pointer' }}>
+                Sign Out
+              </a>
+            </div>
           </>
         )}
       </nav>
