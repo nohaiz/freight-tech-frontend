@@ -1,21 +1,26 @@
 import { useEffect, useState } from 'react';
-import shipperServices from '../../services/shipperOrder/shipperServices';
 import { Link } from 'react-router-dom';
-import './shipper.css';
+import "../driver/dashboard.css";
 
-const OrderDashboard = (user) => {
-  const userDisplay = (user.user.role).charAt(0).toUpperCase() + user.user.role.slice(1);
+import shipperServices from '../../services/shipperOrder/shipperServices';
+import profileServices from '../../services/user/profileServices';
+
+const OrderDashboard = ({ user, formatTimestamp }) => {
+
+  const [userDisplay, setUserDisplay] = useState([])
   const [shipper, setShipper] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
 
-  if (user.user.role === 'shipper') {
+  if (user.role === 'shipper') {
 
     const fetchShipper = async () => {
       try {
         const shipperData = await shipperServices.indexShipperOrders();
+        const shipperName = await profileServices.showUser(user.userId)
         setShipper(sortByOrderId(shipperData));
         setFilteredData(sortByOrderId(shipperData));
+        setUserDisplay(shipperName);
       } catch (err) {
         console.log(err);
       }
@@ -48,6 +53,11 @@ const OrderDashboard = (user) => {
       setFilteredData(sortByOrderId(filtered));
       setActiveTab('all');
     };
+    const onRoute = () => {
+      const filtered = shipper.filter((status) => status.orderStatus === 'on_route');
+      setFilteredData(sortByOrderId(filtered));
+      setActiveTab('on-route');
+    }
 
     useEffect(() => {
       fetchShipper();
@@ -57,8 +67,7 @@ const OrderDashboard = (user) => {
       <>
         <main>
           <section>
-            <h1 className="title has-text-dark custome-title">Welcome {userDisplay}</h1>
-            <p>Map Overview should be here</p>
+            <h1 className="title is-1">Welcome {userDisplay.username}</h1>
           </section>
           <section>
             <div className="tabs is-centered">
@@ -72,43 +81,53 @@ const OrderDashboard = (user) => {
                 <li className={activeTab === 'claimed' ? 'is-active' : ''}>
                   <a onClick={claimedOrders}>Claimed Orders</a>
                 </li>
+                <li className={activeTab === 'on-route' ? 'is-active' : ''}>
+                  <a onClick={onRoute}>In Route</a>
+                </li>
                 <li className={activeTab === 'history' ? 'is-active' : ''}>
                   <a onClick={orderHistory}>Order History</a>
                 </li>
                 <li>
-                  <button type="button"><Link to="/shippers/orders/new">New Delivery</Link></button>
+                  <button type="button" style={{ marginLeft: '30px' }}><Link to="/shippers/orders/new">New Delivery</Link></button>
                 </li>
               </ul>
             </div>
             {filteredData.length === 0 ? (
-              <p className="title has-text-dark custom-message">This section is currently empty. Check back later!</p>
+              <p className="title has-text-dark custom-message">Check back later!</p>
             ) :
               <div className="columns is-multiline">
                 {filteredData.map((order) =>
-                  <div className="column is-half" key={order.orderId}>
-                    <div className="card custom-card-details">
-                      <Link to={`/shippers/orders/${order.orderId}`}>
-                        <div className="card-content">
-                          <div className="media">
-                            <div className="media-content">
-                              <p className="title is-3">Order #{order.orderId}</p>
+                  <>
+                    <div className="column is-half" key={order.orderId}>
+                      <div className="card custom-card-dashboard">
+                        <Link to={`/shippers/orders/${order.orderId}`}>
+                          <div className="card-content">
+                            <div className="media">
+                              <div className="media-content">
+                                <div className="media-left">
+                                  <figure className="image is-64x64">
+                                    <img src="/checklist.png" alt="Service 3" />
+                                  </figure>
+                                  <p className="title is-3">Order #{order.orderId}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="content">
+                              <p className="subtitle is-5 ">Pick up location: {order.pickupLocation}</p>
+                              <p className="subtitle is-5">Drop off location: {order.dropoffLocation}</p>
+                              <p className="subtitle is-5">Order status: {order.orderStatus === 'completed' ? 'Completed' : order.orderStatus === 'on_route' ? 'In Route' : 'Pending'}</p>
+                              <p className="subtitle is-5">ETA: {formatTimestamp(order.deliveryTime)}</p>
                             </div>
                           </div>
-                          <div className="content">
-                            <p className="subtitle is-6"><strong>Pick up location:</strong> {order.pickupLocation}</p>
-                            <p className="subtitle is-6"><strong>Drop off location:</strong> {order.dropoffLocation}</p>
-                            <p className="subtitle is-6"><strong>Order status:</strong> {order.orderStatus}</p>
-                            <p className="subtitle is-6"><strong>Delivery time:</strong> {order.deliveryTime}</p>
-                          </div>
-                        </div>
-                      </Link>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
-              </div>
+              </div >
             }
           </section>
-        </main>
+        </main >
       </>
     );
   } else {

@@ -48,6 +48,18 @@ function App() {
     }
   };
 
+  function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    return date.toLocaleString('en-US', options);
+  }
+
   return (
     <>
       <Navbar user={user} handleSignout={handleSignout} />
@@ -70,12 +82,12 @@ function App() {
             {/* PRIVATE ROUTES */}
 
             {/* DRIVER ROUTES */}
-            <Route path="/drivers/orders" element={<LoadDashboard user={user} />} />
-            <Route path="/drivers/orders/:id" element={<LoadDetails user={user} />} />
+            <Route path="/drivers/orders" element={<LoadDashboard user={user} formatTimestamp={formatTimestamp} />} />
+            <Route path="/drivers/orders/:id" element={<LoadDetails user={user} formatTimestamp={formatTimestamp} />} />
             {/* SHIPPER ROUTES */}
-            <Route path="/shippers/orders" element={<OrderDashboard user={user} />} />
-            <Route path="/shippers/orders/new" element={<ShipperOrderForm user={user} />} />
-            <Route path="/shippers/orders/:id" element={<OrderDetails />} />
+            <Route path="/shippers/orders" element={<OrderDashboard user={user} formatTimestamp={formatTimestamp} />} />
+            <Route path="/shippers/orders/new" element={<ShipperOrderForm user={user} formatTimestamp={formatTimestamp} />} />
+            <Route path="/shippers/orders/:id" element={<OrderDetails formatTimestamp={formatTimestamp} />} />
             <Route path="/shippers/orders/:orderId/edit" element={<ShipperOrderForm user={user} />} />
             {/* ADMIN ORDER ROUTES */}
             <Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />

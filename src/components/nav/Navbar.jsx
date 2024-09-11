@@ -3,44 +3,59 @@ import { Link } from "react-router-dom";
 
 const Navbar = ({ user, handleSignout }) => {
   return (
-    <nav>
-      {!user ? (
-        <>
-          <Link to="/auth/sign-in">Sign In</Link>
-          <Link to="/auth/sign-up">Sign Up</Link>
-        </>
-      ) : (
-        <>
-          <Link to={`/${user.role}s/orders`}>Home</Link>
-          <Link to={`/users/${user.userId}`}>Profile</Link>
-          <a onClick={handleSignout} href="/">
-            Sign Out
-          </a>
-          {user.role === "admin" ? (
-            <div className="tabs is-centered">
-              <ul>
-                <li>
-                  <Link to="/admin/orders/new" className="navbar-item">
-                    New Order
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/admins/shippers">Shippers</Link>
-                </li>
-                <li>
-                  <Link to="/admins/drivers">Drivers</Link>
-                </li>
-                <li>
-                  <Link to="/admins/users">Create User</Link>
-                </li>
-              </ul>
+    <div className="custom-nav">
+      <nav className="navbar-menu">
+        {!user ? (
+          <>
+            <div className="navbar-start">
+              <Link className="navbar-item" to="/">Home</Link>
             </div>
-          ) : (
-            <></>
-          )}
-        </>
-      )}
-    </nav>
+            <div className="navbar-end">
+              <Link className="navbar-item" to="/auth/sign-in">Sign In</Link>
+              <Link className="navbar-item" to="/auth/sign-up">Sign Up</Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="navbar-start">
+              <Link className="navbar-item" to={`/${user.role}s/orders`}>Dashboard</Link>
+              <Link className="navbar-item" to={`/users/${user.userId}`}>Profile</Link>
+            </div>
+            {user.role === "admin" && (
+              <div className="navbar-start">
+                <ul>
+                  <li>
+                    <Link className="navbar-item" to="/admin/orders/new">
+                      New Order
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="navbar-item" to="/admins/shippers">
+                      Shippers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="navbar-item" to="/admins/drivers">
+                      Drivers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="navbar-item" to="/admins/users">
+                      Create User
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+            <div className="navbar-end">
+              <a className="navbar-item" onClick={handleSignout} href="/" style={{ cursor: 'pointer' }}>
+                Sign Out
+              </a>
+            </div>
+          </>
+        )}
+      </nav>
+    </div>
   );
 };
 
