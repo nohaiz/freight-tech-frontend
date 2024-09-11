@@ -34,12 +34,12 @@ const SignUpForm = (prop) => {
     const errors = {};
     const { email, password, confirmPassword, verifiedUser } = formData;
 
-    if (!email.trim()) errors.email = "Email is required.";
+    if (!email.trim()) errors.email = "*";
     if (!password || password.length < 8)
-      errors.password = "Password must be at least 8 characters long.";
+      errors.password = "*";
     if (password !== confirmPassword)
-      errors.confirmPassword = "Passwords do not match.";
-    if (verifiedUser === null) errors.verifiedUser = "Please select an option.";
+      errors.confirmPassword = "*";
+    if (verifiedUser === null) errors.verifiedUser = "*";
 
     return errors;
   };
@@ -82,127 +82,91 @@ const SignUpForm = (prop) => {
 
   return (
     <>
-      <div className="background">
-        <div className="box">
-          <form onSubmit={handleSubmit}>
-            <div className="field">
-              <label className="label">Username</label>
-              <div className="control has-icons-left">
-                <input
-                  className="input"
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Enter your username"
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-user"></i>
-                </span>
-              </div>
-              {errors.username && (
-                <p className="help is-danger">{errors.username}</p>
-              )}
-            </div>
-
-            <div className="field">
-              <label className="label">Email</label>
-              <div className="control has-icons-left">
-                <input
-                  className="input"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-              </div>
+      <div className="columns is-vcentered">
+        <div className="column">
+          <form onSubmit={handleSubmit} className="sign-up-form-container">
+            <h1 className="title is-2 has-text-centered">Sign Up</h1>
+            <div className="custom-field">
+              {errors.general && <p className="notification is-danger">{errors.general}</p>}
+              <label className="label has-text-white">Username</label>
+              <input
+                className="input"
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+              />
               {errors.email && <p className="help is-danger">{errors.email}</p>}
-            </div>
-
-            <div className="field">
-              <label className="label">Password</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                />
-              </div>
+              <label className="label has-text-white">Email</label>
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />
               {errors.password && (
                 <p className="help is-danger">{errors.password}</p>
               )}
-            </div>
-
-            <div className="field">
-              <label className="label">Confirm Password</label>
-              <div className="control">
-                <input
-                  className="input"
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm your password"
-                />
-              </div>
+              <label className="label has-text-white">Password</label>
+              <input
+                className="input"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+              />
               {errors.confirmPassword && (
                 <p className="help is-danger">{errors.confirmPassword}</p>
               )}
-            </div>
-
-            <div className="field">
-              <label className="label">Are you a Shipper?</label>
-              <div className="control">
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="verifiedUser"
-                    value={true}
-                    checked={formData.verifiedUser === true}
-                    onChange={() =>
-                      setFormData({ ...formData, verifiedUser: true })
-                    }
-                  />
-                  Yes
-                </label>
-                <label className="radio">
-                  <input
-                    type="radio"
-                    name="verifiedUser"
-                    value={false}
-                    checked={formData.verifiedUser === false}
-                    onChange={() =>
-                      setFormData({ ...formData, verifiedUser: false })
-                    }
-                  />
-                  No
-                </label>
-              </div>
+              <label className="label has-text-white">Confirm Password</label>
+              <input
+                className="input"
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+              />
               {errors.verifiedUser && (
                 <p className="help is-danger">{errors.verifiedUser}</p>
               )}
-            </div>
-
-            <div className="field is-grouped">
-              <div className="control">
-                <button className="button is-link is-dark " type="submit">
-                  Sign Up
-                </button>
+              <div className="radio-button">
+                <label className="label has-text-white">Are you a Shipper?</label>
+                <label className="radio">Yes</label>
+                <input
+                  type="radio"
+                  name="verifiedUser"
+                  value={true}
+                  checked={formData.verifiedUser === true}
+                  onChange={() =>
+                    setFormData({ ...formData, verifiedUser: true })
+                  }
+                />
+                <label className="radio">No</label>
+                <input
+                  type="radio"
+                  name="verifiedUser"
+                  value={false}
+                  checked={formData.verifiedUser === false}
+                  onChange={() =>
+                    setFormData({ ...formData, verifiedUser: false })
+                  }
+                />
               </div>
             </div>
-            {errors.general && (
-              <p className="help is-danger">{errors.general}</p>
-            )}
-          </form>
+            <button className="button has-background-warning" type="submit">
+              Sign Up
+            </button>
+          </form >
         </div>
-      </div>
+        <div className="column custom-image">
+          <img src="/illustration.png" alt="illustration" />
+        </div>
+      </div >
     </>
   );
 };

@@ -1,0 +1,99 @@
+/* ORDERS DETAILS PAGE */
+.title.custom-title-details {
+  font-size: 50px;
+  font-weight: 500;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-left: 30px;
+  margin-top: 45px;
+}
+
+.card.custom-card-details {
+  flex: 1;
+  height: 100%;
+  min-height: 200px;
+  background-color: black;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  /* border: 10px solid #FFA500; */
+}
+
+.buttons {
+  width: 100%;
+}
+
+.subtitle.is-5 {
+  color: white;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+
+/* ORDER DASHBOARD */
+.title.is-1 {
+  margin-top: 20px;
+  font-weight: 500;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.title.is-3 {
+  font-weight: 600;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.title.custom-message {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.media-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card.custom-card-dashboard {
+  flex: 1;
+  height: 100%;
+  min-height: 200px;
+  background-color: black;
+  margin-left: 20px;
+}
+
+/* OPTIONAL DONT DELETE THO */
+.card .title {
+  color: #ffdd57;
+}
+
+/* .card .subtitle {
+  color: #ffdd57;
+} */
+
+/* ORDER DASHBOARD TABS */
+
+.tabs ul {
+  border-bottom: 1px solid white;
+}
+
+.tabs ul li a {
+  border: 1px solid transparent;
+  font-size: 1.1rem;
+}
+
+.tabs ul li.is-active a {
+  color: black;
+  cursor: default;
+}
+
+/* PAGE LAYOUT */
+
+.full-height {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+html body {
+  min-height: 100vh;
+}
