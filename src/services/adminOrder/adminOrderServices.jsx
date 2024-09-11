@@ -25,6 +25,7 @@ const newAdminOrder = async (formData) => {
 }
 
 const updateAdminOrder = async (id, formData) => {
+  console.log(id,formData)
   try {
     const res = await fetch(`${BASE_URL}/admin/orders/${id}`, {
       method: 'PUT',

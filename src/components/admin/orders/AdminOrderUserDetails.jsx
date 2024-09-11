@@ -40,30 +40,29 @@ const AdminOrderUserDetails = () => {
       const updatedOrder = { ...orderDetails, driverId: userId }; 
       await adminOrderServices.updateAdminOrder(selectedAssignOrderId, updatedOrder);
       setAssignedOrders([...assignedOrders, updatedOrder]); 
-      navigate(`/admin/orders/${userId}/edit`);
+      navigate(`/admin/orders/${userId}`);
     } catch (error) {
       console.error("Error assigning order:", error);
     }
   };
+  
 
-const handleUnassignOrder = async () => {
-  try {
-    const orderDetails = await adminOrderServices.adminOrderDetails(selectedUnassignOrderId);
-    
-    const updatedOrder = { ...orderDetails, driverId: null }; 
-    
-    setAssignedOrders(assignedOrders.filter(order => order.orderId !== selectedUnassignOrderId));
-    
-    setAllOrders(allOrders.map(order => 
-      order.orderId === selectedUnassignOrderId ? updatedOrder : order
-    ));
-
-    navigate(`/admin/orders/${userId}/edit`);
-  } catch (error) {
-    console.error("Error unassigning order:", error);
-  }
-};
-
+  const handleUnassignOrder = async () => {
+    try {
+      const orderDetails = await adminOrderServices.adminOrderDetails(selectedUnassignOrderId);
+      const updatedOrder = { ...orderDetails, driverId: "0" }; 
+      await adminOrderServices.updateAdminOrder(selectedUnassignOrderId, updatedOrder);
+      setAssignedOrders(assignedOrders.filter(order => order.orderId !== selectedUnassignOrderId));
+      setAllOrders(allOrders.map(order => 
+        order.orderId === selectedUnassignOrderId ? updatedOrder : order
+      ));
+  
+      navigate(`/admin/orders/${userId}`);
+    } catch (error) {
+      console.error("Error unassigning order:", error);
+    }
+  };
+  
   return (
     <div className="background">
       <div className="box">
@@ -83,16 +82,19 @@ const handleUnassignOrder = async () => {
                   <div>
                     <label>Assign an Order: </label>
                     <select
-                      onChange={(e) => setSelectedAssignOrderId(e.target.value)}
-                      defaultValue=""
-                    >
-                      <option value="" disabled>Select an order</option>
-                      {allOrders.map(order => (
-                        <option key={order.orderId} value={order.orderId}>
-                          {order.pickupLocation} to {order.dropoffLocation} ({order.vehicleType})
-                        </option>
-                      ))}
+                        onChange={(e) => setSelectedAssignOrderId(e.target.value)}
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Select an order</option>
+                        {allOrders
+                          .filter(order => !order.driverId || order.driverId !== parseInt(userId)) 
+                          .map(order => (
+                            <option key={order.orderId} value={order.orderId}>
+                              {order.pickupLocation} to {order.dropoffLocation} ({order.vehicleType})
+                            </option>
+                          ))}
                     </select>
+
                     <button className="button is-primary ml-2" onClick={handleAssignOrder}>
                       Confirm Assign
                     </button>
