@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer, useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { useNavigate, useParams } from "react-router-dom";
 
+import './form.css'
 
 import adminUserServices from "../../services/adminUser/adminUserServices";
 import adminOrderServices from "../../services/adminOrder/adminOrderServices";
@@ -213,28 +214,21 @@ const OrderForm = ({ user }) => {
   if (!isLoaded) return <div>Loading Maps...</div>;
 
   return (
-    <main>
-      <GoogleMap
-        mapContainerStyle={{ height: "350px", width: "100%" }}
-        zoom={10}
-        center={mapCenter}
-      >
-        {directions && <DirectionsRenderer directions={directions} />}
-      </GoogleMap>
-
-      <form onSubmit={handleSubmit}>
+    <main className="main-map">
+      <form onSubmit={handleSubmit} className="form-container-map">
+        <h1 className="title is-2 has-text-centered custom-title">{orderId ? 'Update Order' : 'New Order'}</h1>
         {user.role === 'admin' ?
           <>
-            <label htmlFor="customerId">Shipper</label>
+            <label htmlFor="customerId" className="label has-text-white">Shipper</label>
             <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
-              <option value={"null"}>None</option>
+              <option value={`${user.role === 'admin' ? '0' : null}`}>None</option>
               {userData.filter(user => user.roles.includes('shipper')).map(user => (
                 <option key={user.userId} value={user.userId}>{user.username}</option>
               ))}
             </select>
-            <label htmlFor="driverId">Driver</label>
+            <label htmlFor="driverId" className="label has-text-white">Driver</label>
             <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
-              <option value={"null"}>None</option>
+              <option value={`${user.role === 'admin' ? '0' : null}`}>None</option>
               {userData.filter(user => user.roles.includes('driver')).map(user => (
                 <option key={user.userId} value={user.userId}>{user.username}</option>
               ))}
@@ -244,8 +238,7 @@ const OrderForm = ({ user }) => {
           :
           <></>
         }
-
-        <label htmlFor="pickupLocation">Pick-up</label>
+        <label htmlFor="pickupLocation" className="label has-text-white">Pick-up</label>
         <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
           <input
             placeholder="Pick-up Address"
@@ -255,10 +248,11 @@ const OrderForm = ({ user }) => {
             id="pickupLocation"
             value={formData.pickupLocation}
             onChange={handleChange}
+            className="input"
           />
         </Autocomplete>
 
-        <label htmlFor="dropoffLocation">Dropoff</label>
+        <label htmlFor="dropoffLocation" className="label has-text-white">Dropoff</label>
         <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
           <input
             placeholder="Drop off Address"
@@ -268,11 +262,21 @@ const OrderForm = ({ user }) => {
             id="dropoffLocation"
             value={formData.dropoffLocation}
             onChange={handleChange}
+            className="input"
           />
         </Autocomplete>
-        <p>Order status: Pending</p>
 
-        <label htmlFor="weightValue">Weight</label>
+        <label htmlFor="orderStatus" className="label has-text-white">Order status:</label>
+        <input
+          type="text"
+          name="orderStatus"
+          id="orderStatus"
+          value={formData.orderStatus}
+          className="input"
+          readOnly
+        />
+
+        <label htmlFor="weightValue" className="label has-text-white">Weight</label>
         <input
           placeholder="Weight"
           required
@@ -281,11 +285,20 @@ const OrderForm = ({ user }) => {
           id="weightValue"
           value={formData.weightValue}
           onChange={handleChange}
+          className="input"
         />
 
-        <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
+        <label htmlFor="paymentAmount" className="label has-text-white">Rate</label>
+        <input
+          type="text"
+          name="paymentAmount"
+          id="paymentAmount"
+          value={paymentAmount}
+          className="input"
+          readOnly
+        />
 
-        <label htmlFor="dimensions">Dimensions</label>
+        <label htmlFor="dimensions" className="label has-text-white">Dimensions</label>
         <input
           placeholder="Dimensions"
           required
@@ -294,9 +307,10 @@ const OrderForm = ({ user }) => {
           id="dimensions"
           value={formData.dimensions}
           onChange={handleChange}
+          className="input"
         />
 
-        <label htmlFor="vehicleType">Vehicle type</label>
+        <label htmlFor="vehicleType" className="label has-text-white">Vehicle type</label>
         <select
           required
           name="vehicleType"
@@ -309,10 +323,28 @@ const OrderForm = ({ user }) => {
           <option value="van">Van</option>
         </select>
 
-        <p>Delivery time: {formData.deliveryTime || "0"}</p>
+        <label htmlFor="deliveryTime" className="label has-text-white">Delivery time</label>
+        <input
+          placeholder="Delivery Time"
+          type="text"
+          name="deliveryTime"
+          id="deliveryTime"
+          value={formData.deliveryTime || "0"}
+          onChange={handleChange}
+          className="input"
+        />
 
         <button id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
       </form>
+      <div className="content custom-content-map">
+        <GoogleMap
+          mapContainerStyle={{ height: "100vh", width: "45vw" }}
+          zoom={10}
+          center={mapCenter}
+        >
+          {directions && <DirectionsRenderer directions={directions} />}
+        </GoogleMap>
+      </div>
     </main>
   );
 }
