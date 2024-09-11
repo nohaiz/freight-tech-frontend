@@ -20,7 +20,6 @@ const AdminOrderDetails = () => {
         const shipperData = await adminOrderServices.AdminUserOrderDetails (id);
         setOrderDetails(shipperData)
       } catch (err) {
-        console.log(err);
       }
     }
     fetchOrderDetails();

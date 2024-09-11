@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminUserServices from "../../../services/adminUser/adminUserServices";
-import adminOrderServices from "../../../services/adminOrder/adminOrderServices"; // Import order services
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices"; 
 
 const AdminDriverList = () => {
   const [drivers, setDrivers] = useState([]);
-  const [orders, setOrders] = useState([]); // To store all orders
+  const [orders, setOrders] = useState([]); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch drivers and orders on component mount
+
     const fetchUsersAndOrders = async () => {
       try {
         const allUsers = await adminUserServices.indexUsers();
         const driverUsers = allUsers.filter((user) => user.roles.includes("driver"));
         setDrivers(driverUsers);
 
-        const allOrders = await adminOrderServices.indexOrders(); // Fetch all orders
+        const allOrders = await adminOrderServices.indexOrders(); 
         setOrders(allOrders);
       } catch (error) {
         console.error("Error fetching drivers or orders:", error);
@@ -26,14 +26,12 @@ const AdminDriverList = () => {
     fetchUsersAndOrders();
   }, []);
 
-  // Function to get the number of active orders for a specific driver
   const getActiveOrdersCount = (driverId) => {
     return orders.filter(
       (order) => order.driverId === driverId && order.orderStatus !== "complete"
     ).length;
   };
 
-  // Function to get the number of completed orders for a specific driver
   const getCompletedOrdersCount = (driverId) => {
     return orders.filter(
       (order) => order.driverId === driverId && order.orderStatus === "complete"

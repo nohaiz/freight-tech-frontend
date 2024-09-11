@@ -14,7 +14,6 @@ const AdminUnclaimedOrderList = () => {
         setOrders(unclaimedOrders);
         console.log(unclaimedOrders);
       } catch (error) {
-        console.error("Error fetching orders:", error);
       }
     };
     fetchOrders();
@@ -29,7 +28,6 @@ const AdminUnclaimedOrderList = () => {
       await adminOrderServices.deleteOrder(orderId);  
       setOrders(orders.filter((order) => order.orderId !== orderId));
     } catch (error) {
-      console.error("Error deleting order:", error);
     }
   };
 

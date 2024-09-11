@@ -28,7 +28,6 @@ const AdminOrderUserDetails = () => {
           setAssignedOrders(driverOrders);
         }
       } catch (error) {
-        console.error("Error fetching user or orders:", error);
       }
     };
 
@@ -40,7 +39,6 @@ const AdminOrderUserDetails = () => {
       await adminOrderServices.assignOrderToDriver(selectedAssignOrderId, userId);
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
-      console.error("Error assigning order:", error);
     }
   };
 

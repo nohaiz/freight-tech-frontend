@@ -23,7 +23,6 @@ const AdminUpdateUserOrderForm = () => {
           });
         }
       } catch (error) {
-        console.error("Error fetching user details:", error);
         setError("Failed to fetch user details.");
       }
     };
@@ -87,7 +86,6 @@ const AdminUpdateUserOrderForm = () => {
         }
       }
     } catch (error) {
-      console.error("Error submitting user data:", error);
       setError("Failed to submit user data.");
     }
   };
@@ -162,7 +160,6 @@ const showUser = async (userId) => {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Failed to fetch user:", error);
     throw error;
   }
 };

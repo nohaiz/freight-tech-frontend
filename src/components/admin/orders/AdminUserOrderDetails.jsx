@@ -10,26 +10,24 @@ const AdminUserOrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
 
-  // Fetch order details and driver list on component mount
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
         const shipperData = await adminOrderServices.adminOrderDetails(orderId);
         setOrderDetails(shipperData);
       } catch (err) {
-        console.error("Error fetching order details:", err);
       }
     };
 
     const fetchUsers = async () => {
       try {
-        const allUsers = await adminUserServices.indexUsers(); // Use indexUsers to fetch all users
-        console.log("All Users:", allUsers); // Debugging log
+        const allUsers = await adminUserServices.indexUsers();
+        
         const driverUsers = allUsers.filter((user) => user.roles.includes("driver"));
-        console.log("Driver Users:", driverUsers); // Debugging log
+     
         setDrivers(driverUsers);
       } catch (err) {
-        console.error("Error fetching drivers:", err);
+       
       }
     };
 
@@ -40,19 +38,17 @@ const AdminUserOrderDetails = () => {
   const assignDriver = async () => {
     try {
       const updatedOrder = { ...orderDetails, driverId: selectedDriverId };
-      await adminOrderServices.updateAdminOrder(orderId, updatedOrder); // Update order in backend
-      setOrderDetails(updatedOrder); // Update order in frontend
+      await adminOrderServices.updateAdminOrder(orderId, updatedOrder); 
+      setOrderDetails(updatedOrder); 
     } catch (err) {
-      console.error("Error assigning driver:", err);
     }
   };
 
   const handleDeleteOrder = async () => {
     try {
       await adminOrderServices.deleteOrder(orderId);
-      navigate('/admin/orders'); // Redirect after deletion
+      navigate('/admin/orders'); 
     } catch (error) {
-      console.error("Error deleting order:", error);
     }
   };
 

@@ -15,7 +15,6 @@ const AdminShipperList = () => {
         ); 
         setShippers(shipperUsers);
       } catch (error) {
-        console.error("Error fetching shippers:", error);
       }
     };
     fetchUsers();
