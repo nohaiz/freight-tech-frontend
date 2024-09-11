@@ -1,6 +1,15 @@
 html,
 body {
   height: 100vh;
+  margin: 0;
+}
+
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0; /* Optional: to give some contrast */
 }
 
 .box {
@@ -8,19 +17,46 @@ body {
   border-radius: 12px;
   color: #000000;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  width: 40%;
+  width: 60%; /* Adjust width as needed */
   padding: 40px;
-  transform: translateY(-50px);
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 80vh; /* Adjust height as needed */
+  max-height: 900px; /* Optional: maximum height to avoid overflow on very large screens */
 }
 
 .title {
-  text-align: center;
   margin-bottom: 30px;
 }
 
 .content {
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Allow this section to take up available space */
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column; /* Stack profile section and user info */
+  align-items: center; /* Center align the profile section and info */
+  gap: 20px; /* Space between profile and user info */
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-image {
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  color: white;
 }
 
 p {
@@ -30,7 +66,7 @@ p {
 .buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: auto; /* Push buttons to the bottom */
 }
 
 button {

@@ -41,24 +41,41 @@ const AdminUserDetails = () => {
           <h1 className="title">User Details</h1>
           {user && (
             <div className="user-details">
-              <p>
-                <strong>Username:</strong> {user.username}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p>
-                <strong>Verified User:</strong>{" "}
-                {user.verifiedUser ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Roles:</strong>{" "}
-                {user.roles
-                  .map((role) => role.charAt(0).toUpperCase() + role.slice(1))
-                  .join(", ")}
-              </p>
+              <div className="profile-section">
+                <img
+                  className="profile-image"
+                  src={
+                    user.profileImage ||
+                    "https://via.placeholder.com/100?text=Profile"
+                  }
+                  alt="Profile"
+                />
+                <div className="user-info">
+                  <p>
+                    <strong>Username:</strong> {user.username}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Verified User:</strong>{" "}
+                    {user.verifiedUser ? "Yes" : "No"}
+                  </p>
+                  <p>
+                    <strong>Roles:</strong>{" "}
+                    {user.roles
+                      .map(
+                        (role) => role.charAt(0).toUpperCase() + role.slice(1)
+                      )
+                      .join(", ")}
+                  </p>
+                </div>
+              </div>
               <div className="buttons">
-                <button className="button is-dark is-link" onClick={handleEdit}>
+                <button
+                  className="button has-background-warning"
+                  onClick={handleEdit}
+                >
                   Edit
                 </button>
                 <button
