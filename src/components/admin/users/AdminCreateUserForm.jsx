@@ -54,6 +54,14 @@ const AdminCreateUserForm = () => {
       return;
     }
 
+    const hasDriverRole = user.role.includes("driver");
+    const hasShipperRole = user.role.includes("shipper");
+
+    if (hasDriverRole && hasShipperRole) {
+      setError("Cannot assign both 'driver' and 'shipper' roles.");
+      return;
+    }
+
     try {
       const response = await adminServices.createUser(user);
 
@@ -78,13 +86,15 @@ const AdminCreateUserForm = () => {
 
   return (
     <>
-      <div className="background">
-        <div className="box">
-          <h1 className="title">Create User</h1>
-          <form onSubmit={handleSubmit}>
+      <div className="columns-two is-vcentered">
+        <div className="column">
+          <form onSubmit={handleSubmit} className="sign-up-form-container">
+            <h1 className="title is-2 has-text-centered custom-title">
+              Create User
+            </h1>
             <div className="field">
-              <label className="label">Username:</label>
-              <div className="control has-icons-left">
+              <label className="label">Username</label>
+              <div className="control">
                 <input
                   className="input"
                   type="text"
@@ -93,15 +103,12 @@ const AdminCreateUserForm = () => {
                   onChange={handleChange}
                   placeholder="Enter your username"
                 />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-user"></i>
-                </span>
               </div>
             </div>
 
             <div className="field">
-              <label className="label">Email:</label>
-              <div className="control has-icons-left">
+              <label className="label">Email</label>
+              <div className="control">
                 <input
                   className="input"
                   type="email"
@@ -110,14 +117,11 @@ const AdminCreateUserForm = () => {
                   onChange={handleChange}
                   placeholder="Enter your email"
                 />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
               </div>
             </div>
 
             <div className="field">
-              <label className="label">Password:</label>
+              <label className="label">Password</label>
               <div className="control">
                 <input
                   className="input"
@@ -131,7 +135,7 @@ const AdminCreateUserForm = () => {
             </div>
 
             <div className="field">
-              <label className="label">Confirm Password:</label>
+              <label className="label">Confirm Password</label>
               <div className="control">
                 <input
                   className="input"
@@ -145,7 +149,7 @@ const AdminCreateUserForm = () => {
             </div>
 
             <div className="field">
-              <label className="label">Roles:</label>
+              <label className="label">Roles</label>
               <div className="control roles-container">
                 {allRoles.map((role) => (
                   <label key={role} className="checkbox role-checkbox">
@@ -163,7 +167,7 @@ const AdminCreateUserForm = () => {
             </div>
 
             <div className="field">
-              <label className="label">Verified User:</label>
+              <label className="label">Verified User</label>
               <div className="control">
                 <label className="checkbox">
                   <input
@@ -177,13 +181,9 @@ const AdminCreateUserForm = () => {
               </div>
             </div>
 
-            <div className="field is-grouped">
-              <div className="control">
-                <button className="button is-link is-dark" type="submit">
-                  Create
-                </button>
-              </div>
-            </div>
+            <button className="button has-background-warning" type="submit">
+              Create
+            </button>
           </form>
         </div>
       </div>

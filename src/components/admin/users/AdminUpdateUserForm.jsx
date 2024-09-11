@@ -68,6 +68,14 @@ const AdminUpdateUserForm = () => {
       return;
     }
 
+    const hasDriverRole = user.roles.includes("driver");
+    const hasShipperRole = user.roles.includes("shipper");
+
+    if (hasDriverRole && hasShipperRole) {
+      setError("Cannot assign both 'driver' and 'shipper' roles.");
+      return;
+    }
+
     try {
       const updatedUserData = {
         username: user.username,
@@ -99,57 +107,53 @@ const AdminUpdateUserForm = () => {
 
   return (
     <>
-      <div className="background">
-        <div className="box">
-          <h1 className="title">Update User</h1>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <form onSubmit={handleSubmit}>
+      <div className="columns-two">
+        <div className="column">
+          <form onSubmit={handleSubmit} className="sign-up-form-container">
+            <h1 className="title is-2 has-text-centered custom-title">
+              Update User
+            </h1>
+            {error && <p className="notification is-danger">{error}</p>}
             <div className="field">
-              <label className="label">Username:</label>
-              <div className="control has-icons-left">
+              <label className="label">Username</label>
+              <div className="control">
                 <input
                   className="input"
                   type="text"
                   name="username"
-                  value={user.username || ""} // Ensure default value
+                  value={user.username}
                   onChange={handleChange}
                   placeholder="Enter your username"
                 />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-user"></i>
-                </span>
               </div>
             </div>
 
             <div className="field">
-              <label className="label">Email:</label>
-              <div className="control has-icons-left">
+              <label className="label">Email</label>
+              <div className="control">
                 <input
                   className="input"
                   type="email"
                   name="email"
-                  value={user.email || ""} // Ensure default value
+                  value={user.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
                 />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
               </div>
             </div>
 
             <div className="field">
-              <label className="label">Roles:</label>
+              <label className="label">Roles</label>
               <div className="control roles-container">
                 {allRoles.map((role) => (
                   <label key={role} className="checkbox role-checkbox">
                     <input
                       type="checkbox"
-                      name="roles" // Ensure name matches your form handling logic
+                      name="roles"
                       value={role}
                       checked={
                         Array.isArray(user.roles) && user.roles.includes(role)
-                      } // Safeguard against undefined
+                      }
                       onChange={handleChange}
                     />
                     <span className="role-name">{role}</span>
@@ -159,13 +163,13 @@ const AdminUpdateUserForm = () => {
             </div>
 
             <div className="field">
-              <label className="label">Verified User:</label>
+              <label className="label">Verified User</label>
               <div className="control">
                 <label className="checkbox">
                   <input
                     type="checkbox"
                     name="verifiedUser"
-                    checked={user.verifiedUser || false} // Safeguard against undefined
+                    checked={user.verifiedUser || false}
                     onChange={handleChange}
                   />
                   Verified
@@ -175,7 +179,7 @@ const AdminUpdateUserForm = () => {
 
             <div className="field is-grouped">
               <div className="control">
-                <button className="button is-link is-dark" type="submit">
+                <button className="button has-background-warning" type="submit">
                   Update
                 </button>
               </div>
