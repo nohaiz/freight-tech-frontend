@@ -1,51 +1,56 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
+import { useNavigate, useParams } from "react-router-dom";
+import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
+import adminUserServices from "../../../services/adminUser/adminUserServices"; // Import the user services
 
 const AdminUserOrderDetails = () => {
-  const [orderDetails, setOrderDetails] = useState([]);
-  const [drivers, setDrivers] = useState([]); 
-  const [selectedDriverId, setSelectedDriverId] = useState(''); 
+  const [orderDetails, setOrderDetails] = useState({});
+  const [drivers, setDrivers] = useState([]);
+  const [selectedDriverId, setSelectedDriverId] = useState('');
   const { orderId } = useParams();
   const navigate = useNavigate();
 
+  // Fetch order details and driver list on component mount
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const shipperData = await adminOrderServices.adminOrderDetails(orderId); 
+        const shipperData = await adminOrderServices.adminOrderDetails(orderId);
         setOrderDetails(shipperData);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching order details:", err);
       }
     };
 
-    const fetchDrivers = async () => {
+    const fetchUsers = async () => {
       try {
-        const driverData = await adminOrderServices.getAllDrivers(); 
-        setDrivers(driverData);
+        const allUsers = await adminUserServices.indexUsers(); // Use indexUsers to fetch all users
+        console.log("All Users:", allUsers); // Debugging log
+        const driverUsers = allUsers.filter((user) => user.roles.includes("driver"));
+        console.log("Driver Users:", driverUsers); // Debugging log
+        setDrivers(driverUsers);
       } catch (err) {
-        console.log(err);
+        console.error("Error fetching drivers:", err);
       }
     };
 
     fetchOrderDetails();
-    fetchDrivers();
+    fetchUsers();
   }, [orderId]);
 
   const assignDriver = async () => {
     try {
       const updatedOrder = { ...orderDetails, driverId: selectedDriverId };
-      await adminOrderServices.updateAdminOrder(orderId, updatedOrder); 
-      setOrderDetails(updatedOrder); 
+      await adminOrderServices.updateAdminOrder(orderId, updatedOrder); // Update order in backend
+      setOrderDetails(updatedOrder); // Update order in frontend
     } catch (err) {
-      console.log(err);
+      console.error("Error assigning driver:", err);
     }
   };
 
-  const handleDeleteOrder = async (orderId) => {
+  const handleDeleteOrder = async () => {
     try {
-      await adminOrderServices.deleteOrder(orderId);  
-      setOrders(orders.filter((order) => order.orderId !== orderId));
+      await adminOrderServices.deleteOrder(orderId);
+      navigate('/admin/orders'); // Redirect after deletion
     } catch (error) {
       console.error("Error deleting order:", error);
     }
@@ -64,30 +69,34 @@ const AdminUserOrderDetails = () => {
       <p>Vehicle type: {orderDetails.vehicleType}</p>
       <p>Delivery time: {orderDetails.deliveryTime}</p>
       <p>Created at: {orderDetails.createdAt}</p>
-      
-      {orderDetails.orderStatus === "pending" &&
+      <p>Driver: {orderDetails.driverId}</p>
+
+      {orderDetails.orderStatus === "pending" && (
         <>
-          
           <div>
-            <label htmlFor="drivers">Assign Driver: </label>
+            <label htmlFor="drivers">Assign a Driver: </label>
             <select
               id="drivers"
               value={selectedDriverId}
               onChange={(e) => setSelectedDriverId(e.target.value)}
             >
               <option value="">Select a driver</option>
-              {drivers.map((driver) => (
-                <option key={driver.driverId} value={driver.driverId}>
-                  {driver.driverName}
-                </option>
-              ))}
+              {drivers.length > 0 ? (
+                drivers.map((driver) => (
+                  <option key={driver.userId} value={driver.userId}>
+                    {driver.username}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No drivers available</option>
+              )}
             </select>
+            <button onClick={assignDriver}>Assign Driver</button>
           </div>
-            <button onClick={() => handleDeleteOrder(order.orderId)}>
-              Cancel Order
-            </button>
+
+          <button onClick={handleDeleteOrder}>Cancel Order</button>
         </>
-      }
+      )}
     </>
   );
 };

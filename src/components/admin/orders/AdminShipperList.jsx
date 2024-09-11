@@ -27,9 +27,9 @@ const AdminShipperList = () => {
   };
 
   return (
-    <div>
-      <h1>Shipper List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title">Shipper List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
             <th>Username</th>
@@ -45,7 +45,9 @@ const AdminShipperList = () => {
               <td>{shipper.email}</td>
               <td>{shipper.verifiedUser ? "Yes" : "No"}</td>
               <td>
-                <button onClick={() => handleViewOrders(shipper.userId)}>
+                <button className="button is-dark "
+                 onClick={() => handleViewOrders(shipper.userId)}
+                 >
                   View Orders
                 </button>
               </td>

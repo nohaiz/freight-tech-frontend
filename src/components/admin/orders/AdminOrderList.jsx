@@ -34,9 +34,9 @@ const AdminOrderList = () => {
   };
 
   return (
-    <div>
-      <h1>Order List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title">Order List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
             <th>Customer ID</th>
@@ -56,10 +56,14 @@ const AdminOrderList = () => {
               <td>{order.dropoffLocation}</td>
               <td>{order.orderStatus}</td>
               <td>
-                <button onClick={() => handleViewDetails(order.orderId)}>
+                <button className="button is-info is-dark"
+                 onClick={() => handleViewDetails(order.orderId)}
+                 >
                   View Details
                 </button>
-                <button onClick={() => handleDeleteOrder(order.orderId)}>
+                <button className="button is-info is-dark"
+                 onClick={() => handleDeleteOrder(order.orderId)}
+                 >
                   Cancel Order
                 </button>
               </td>

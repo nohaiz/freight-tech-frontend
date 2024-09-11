@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
 import adminUserServices from "../../../services/adminUser/adminUserServices";  
+import "bulma/css/bulma.min.css";
 
 const AdminOrderUserDetails = () => {
-  const { userId} = useParams();
+  const { userId } = useParams();
   const [user, setUser] = useState(null);
-  const [assignableOrders, setAssignableOrders] = useState([]);  
+  const [allOrders, setAllOrders] = useState([]); 
   const [assignedOrders, setAssignedOrders] = useState([]);  
-  const [shipperOrders, setShipperOrders] = useState([]);  
-  const [orderDetails, setOrderDetails] = useState(null);  
+  const [selectedAssignOrderId, setSelectedAssignOrderId] = useState('');  
+  const [selectedUnassignOrderId, setSelectedUnassignOrderId] = useState('');  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,104 +19,99 @@ const AdminOrderUserDetails = () => {
         const userDetails = await adminUserServices.showUser(userId);
         setUser(userDetails);
 
-        if (userDetails?.roles === 'driver') {
-          if (userDetails?.vehicleType) {
-            const availableOrders = await adminOrderServices.getOrdersByVehicleType(userDetails.vehicleType);
-            setAssignableOrders(availableOrders);
+        const allOrdersData = await adminOrderServices.indexOrders();
+        setAllOrders(allOrdersData);
 
-            const driverOrders = await adminOrderServices.getOrdersByDriver(userId);
-            setAssignedOrders(driverOrders);
-          }
-        }
+        if (userDetails?.roles.includes('driver')) {
 
-        if (userDetails?.roles === 'shipper') {
-          const shipperOrders = await adminOrderServices.getOrdersByShipper(userId);
-          setShipperOrders(shipperOrders);
-
-          if (userId) {
-            const orderDetails = await shipperServices.shipperOrderDetails(userId);
-            setOrderDetails(orderDetails);
-          }
+          const driverOrders = allOrdersData.filter(order => order.driverId === parseInt(userId));
+          setAssignedOrders(driverOrders);
         }
       } catch (error) {
         console.error("Error fetching user or orders:", error);
       }
     };
+
     fetchUserAndOrders();
   }, [userId]);
 
-  const handleAssignOrder = async (orderId) => {
+  const handleAssignOrder = async () => {
     try {
-      await adminOrderServices.assignOrderToDriver(orderId, userId);
+      await adminOrderServices.assignOrderToDriver(selectedAssignOrderId, userId);
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
       console.error("Error assigning order:", error);
     }
   };
 
-  const handleUnassignOrder = async (orderId) => {
+  const handleUnassignOrder = async () => {
     try {
-      await adminOrderServices.unassignOrder(orderId);
+      await adminOrderServices.unassignOrder(selectedUnassignOrderId);
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
       console.error("Error unassigning order:", error);
     }
   };
 
-  const deleteOrder = async () => {
-    try {
-      await shipperServices.deleteShipperOrder(id);
-      navigate('/shippers/orders');
-    } catch (error) {
-      console.error("Error deleting order:", error);
-    }
-  };
-
   return (
-    <div>
-      <h1>Driver Order Details</h1>
-      {user && (
-        <div>
-          <p><strong>Username:</strong> {user.username}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Verified User:</strong> {user.verifiedUser ? "Yes" : "No"}</p>
-          <p><strong>Role:</strong> {user.roles ? user.roles.join(", ") : "No roles available"}</p>
-          {/* <p><strong>Vehicle Type:</strong> {user.vehicleType ? user.vehicleType.join(", ") : "No vehicle type available"}</p> */}
+    <div className="background">
+      <div className="box">
+        <div className="content">
+          <h1 className="title">Driver Order Details</h1>
+          {user && (
+            <div className="user-details">
+              <p><strong>Username:</strong> {user.username}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Verified User:</strong> {user.verifiedUser ? "Yes" : "No"}</p>
 
-          {user.roles == 'driver' && (
-            <div>
-              <p><strong>Active Orders:</strong> {user.assignOrder ? user.assignOrder.length : 0}</p>
-              <p><strong>Total Orders:</strong> {user.completeOrder ? user.completeOrder.length : 0}</p>
-
-              <div>
-                <label>Assign an Order: </label>
-                <select onChange={(e) => handleAssignOrder(e.target.value)} defaultValue="">
-                  <option value="" disabled>Select an order</option>
-                  {assignableOrders.map(order => (
-                    <option key={order.orderId} value={order.orderId}>
-                      {order.pickupLocation} to {order.dropoffLocation} ({order.vehicleType})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {assignedOrders.length > 0 && (
+              {user.roles.includes('driver') && (
                 <div>
-                  <label>Unassign Order: </label>
-                  <select onChange={(e) => handleUnassignOrder(e.target.value)} defaultValue="">
-                    <option value="" disabled>Select an order</option>
-                    {assignedOrders.map(order => (
-                      <option key={order.orderId} value={order.orderId}>
-                        {order.pickupLocation} to {order.dropoffLocation}
-                      </option>
-                    ))}
-                  </select>
+                  <p><strong>Active Orders:</strong> {assignedOrders.length}</p>
+                  <p><strong>Total Orders:</strong> {allOrders.length}</p>
+
+                  <div>
+                    <label>Assign an Order: </label>
+                    <select
+                      onChange={(e) => setSelectedAssignOrderId(e.target.value)}
+                      defaultValue=""
+                    >
+                      <option value="" disabled>Select an order</option>
+                      {allOrders.map(order => (
+                        <option key={order.orderId} value={order.orderId}>
+                          {order.pickupLocation} to {order.dropoffLocation} ({order.vehicleType})
+                        </option>
+                      ))}
+                    </select>
+                    <button className="button is-primary ml-2" onClick={handleAssignOrder}>
+                      Confirm Assign
+                    </button>
+                  </div>
+
+                  {assignedOrders.length > 0 && (
+                    <div>
+                      <label>Unassign Order: </label>
+                      <select
+                        onChange={(e) => setSelectedUnassignOrderId(e.target.value)}
+                        defaultValue=""
+                      >
+                        <option value="" disabled>Select an order</option>
+                        {assignedOrders.map(order => (
+                          <option key={order.orderId} value={order.orderId}>
+                            {order.pickupLocation} to {order.dropoffLocation}
+                          </option>
+                        ))}
+                      </select>
+                      <button className="button is-danger ml-2" onClick={handleUnassignOrder}>
+                        Confirm Unassign
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
