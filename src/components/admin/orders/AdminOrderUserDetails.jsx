@@ -23,11 +23,11 @@ const AdminOrderUserDetails = () => {
         setAllOrders(allOrdersData);
 
         if (userDetails?.roles.includes('driver')) {
-
           const driverOrders = allOrdersData.filter(order => order.driverId === parseInt(userId));
           setAssignedOrders(driverOrders);
         }
       } catch (error) {
+        console.error("Error fetching user and orders:", error);
       }
     };
 
@@ -36,20 +36,33 @@ const AdminOrderUserDetails = () => {
 
   const handleAssignOrder = async () => {
     try {
-      await adminOrderServices.assignOrderToDriver(selectedAssignOrderId, userId);
+      const orderDetails = await adminOrderServices.adminOrderDetails(selectedAssignOrderId);
+      const updatedOrder = { ...orderDetails, driverId: userId }; 
+      await adminOrderServices.updateAdminOrder(selectedAssignOrderId, updatedOrder);
+      setAssignedOrders([...assignedOrders, updatedOrder]); 
       navigate(`/admin/orders/${userId}/edit`);
     } catch (error) {
+      console.error("Error assigning order:", error);
     }
   };
 
-  const handleUnassignOrder = async () => {
-    try {
-      await adminOrderServices.unassignOrder(selectedUnassignOrderId);
-      navigate(`/admin/orders/${userId}/edit`);
-    } catch (error) {
-      console.error("Error unassigning order:", error);
-    }
-  };
+const handleUnassignOrder = async () => {
+  try {
+    const orderDetails = await adminOrderServices.adminOrderDetails(selectedUnassignOrderId);
+    
+    const updatedOrder = { ...orderDetails, driverId: null }; 
+    
+    setAssignedOrders(assignedOrders.filter(order => order.orderId !== selectedUnassignOrderId));
+    
+    setAllOrders(allOrders.map(order => 
+      order.orderId === selectedUnassignOrderId ? updatedOrder : order
+    ));
+
+    navigate(`/admin/orders/${userId}/edit`);
+  } catch (error) {
+    console.error("Error unassigning order:", error);
+  }
+};
 
   return (
     <div className="background">
