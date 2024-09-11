@@ -13,13 +13,6 @@ const UsersForm = () => {
     username: "",
   });
 
-  const tempData = {
-    email: "test99@gmail.com",
-    userId: 7,
-    username: "test99",
-    verifiedUser: true,
-  };
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
