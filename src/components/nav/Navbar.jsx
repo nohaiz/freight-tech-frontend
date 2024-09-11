@@ -21,32 +21,6 @@ const Navbar = ({ user, handleSignout }) => {
               <Link className="navbar-item" to={`/${user.role}s/orders`}>Dashboard</Link>
               <Link className="navbar-item" to={`/users/${user.userId}`}>Profile</Link>
             </div>
-            {user.role === "admin" && (
-              <div className="navbar-start">
-                <ul>
-                  <li>
-                    <Link className="navbar-item" to="/admin/orders/new">
-                      New Order
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="navbar-item" to="/admins/shippers">
-                      Shippers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="navbar-item" to="/admins/drivers">
-                      Drivers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="navbar-item" to="/admins/users">
-                      Create User
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            )}
             <div className="navbar-end">
               <a className="navbar-item" onClick={handleSignout} href="/" style={{ cursor: 'pointer' }}>
                 Sign Out
