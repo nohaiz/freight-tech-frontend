@@ -10,6 +10,11 @@ const mapContainerStyle = {
   width: "100%",
   height: "350px",
 };
+const mapOptions = {
+  zoomControl: true,
+  mapTypeControl: false,
+  zoomControl: false,
+};
 
 const OrderDetails = ({ formatTimestamp }) => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -64,68 +69,66 @@ const OrderDetails = ({ formatTimestamp }) => {
     calculateRoute();
   }, [orderDetails, calculateRoute]);
 
-  const acceptOrder = async (orderId) => {
-    const updatedOrderDetails = { ...orderDetails, driverId: user.userId };
-    await driverServices.updateDriverOrder(orderId, updatedOrderDetails);
-    navigate('/drivers/orders');
-  };
-
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <div className="full-height">
-      <div className="container mt-5">
-        <h1 className="title has-text-dark custom-title-details">Order Details</h1>
-        <section className="card custom-card-details">
-          <div className="card-content">
-            <div className="columns is-mobile is-multiline">
-              <div className="column is-one-quarter">
-                <p className="subtitle is-5">Order #{orderDetails.orderId}</p>
-                <p className="subtitle is-5">Driver: {orderDetails.driverName ? orderDetails.driverName : <>Driver assignment pending</>}</p>
-                <p className="subtitle is-5">Pick up location: {orderDetails.pickupLocation}</p>
-                <p className="subtitle is-5">Drop off location: {orderDetails.dropoffLocation}</p>
-                <p className="subtitle is-5">Order status: {orderDetails.orderStatus === 'completed' ? 'Completed' : orderDetails.orderStatus === 'on_route' ? 'In Route' : 'Pending'}</p>
-                <p className="subtitle is-5">Weight value: {orderDetails.weightValue}</p>
+    <>
+      {orderDetails.orderStatus === 'on_route' ? (<></>) : (< br />)}
+      <div className="full-height">
+        <div className="container mt-6 custom-container-padding">
+          <h1 className="title has-text-dark custom-title-details">Order Details</h1>
+          <section className="card custom-card-details">
+            <div className="card-content">
+              <div className="columns is-mobile is-multiline">
+                <div className="column is-one-quarter">
+                  <p className="subtitle is-5">Order #{orderDetails.orderId}</p>
+                  <p className="subtitle is-5">Driver: {orderDetails.driverName ? orderDetails.driverName : <> Pending</>}</p>
+                  <p className="subtitle is-5">Pick up location: {orderDetails.pickupLocation}</p>
+                  <p className="subtitle is-5">Drop off location: {orderDetails.dropoffLocation}</p>
+                  <p className="subtitle is-5">Order status: {orderDetails.orderStatus === 'completed' ? 'Completed' : orderDetails.orderStatus === 'on_route' ? 'In Route' : 'Pending'}</p>
+                  <p className="subtitle is-5">Weight value: {orderDetails.weightValue}</p>
 
-              </div>
-              <div className="column is-one-quarter">
-                <p className="subtitle is-5">Dimensions: {orderDetails.dimensions}</p>
-                <p className="subtitle is-5">Payment amount: {orderDetails.paymentAmount}</p>
-                <p className="subtitle is-5">Vehicle type: {orderDetails.vehicleType}</p>
-                <p className="subtitle is-5">Delivery time: {formatTimestamp(orderDetails.deliveryTime)}</p>
-                <p className="subtitle is-5">Created at: {formatTimestamp(orderDetails.createdAt)}</p>
-              </div>
-              <div className="column">
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  zoom={12}
-                >
-                  {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
-                </GoogleMap>
-              </div>
-            </div>
-            <div className="buttons mt-4">
-              {orderDetails.orderStatus === "pending" ?
-                <>
-                  <button
-                    type="button"
-                    onClick={deleteOrder}
-                    className="button is-danger is-fullwidth mr-2"
+                </div>
+                <div className="column is-one-quarter">
+                  <p className="subtitle is-5">Dimensions: {orderDetails.dimensions}</p>
+                  <p className="subtitle is-5">Payment amount: {orderDetails.paymentAmount}</p>
+                  <p className="subtitle is-5">Vehicle type: {orderDetails.vehicleType}</p>
+                  <p className="subtitle is-5">Delivery time: {formatTimestamp(orderDetails.deliveryTime)}</p>
+                  <p className="subtitle is-5">Created at: {formatTimestamp(orderDetails.createdAt)}</p>
+                </div>
+                <div className="column">
+                  <GoogleMap
+                    mapContainerStyle={mapContainerStyle}
+                    zoom={12}
+                    options={mapOptions}
                   >
-                    Delete Order
-                  </button>
-                  <Link to={`/shippers/orders/${orderDetails.orderId}/edit`} className="button is-info is-fullwidth">
-                    Edit Order
-                  </Link>
-                </>
-                : <></>
-              }
+                    {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
+                  </GoogleMap>
+                </div>
+              </div>
+              <div className="buttons">
+                {orderDetails.orderStatus === "pending" ?
+                  <>
+                    <button
+                      type="button"
+                      onClick={deleteOrder}
+                      className="button has-background-danger"
+                    >
+                      Delete Order
+                    </button>
+                    <Link to={`/shippers/orders/${orderDetails.orderId}/edit`} className="button has-background-info">
+                      Edit Order
+                    </Link>
+                  </>
+                  : <></>
+                }
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

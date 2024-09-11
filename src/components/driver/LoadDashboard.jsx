@@ -33,7 +33,7 @@ const LoadDashboard = ({ user, formatTimestamp }) => {
   };
 
   const claimedOrders = () => {
-    const filtered = driver.filter((status) => status.orderStatus === 'pending');
+    const filtered = driver.filter((order) => order.orderStatus === 'pending' && order.driverId);
     setFilteredData(sortByOrderId(filtered));
     setActiveTab('claimed');
   };

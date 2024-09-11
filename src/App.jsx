@@ -80,23 +80,36 @@ function App() {
         ) : (
           <>
             {/* PRIVATE ROUTES */}
-
             {/* DRIVER ROUTES */}
-            <Route path="/drivers/orders" element={<LoadDashboard user={user} formatTimestamp={formatTimestamp} />} />
-            <Route path="/drivers/orders/:id" element={<LoadDetails user={user} formatTimestamp={formatTimestamp} />} />
+            {user.role === 'driver' ?
+              <>
+                <Route path="/drivers/orders" element={<LoadDashboard user={user} formatTimestamp={formatTimestamp} />} />
+                <Route path="/drivers/orders/:id" element={<LoadDetails user={user} formatTimestamp={formatTimestamp} />} />
+              </>
+              : <></>
+            }
+
             {/* SHIPPER ROUTES */}
-            <Route path="/shippers/orders" element={<OrderDashboard user={user} formatTimestamp={formatTimestamp} />} />
-            <Route path="/shippers/orders/new" element={<ShipperOrderForm user={user} formatTimestamp={formatTimestamp} />} />
-            <Route path="/shippers/orders/:id" element={<OrderDetails formatTimestamp={formatTimestamp} />} />
-            <Route path="/shippers/orders/:orderId/edit" element={<ShipperOrderForm user={user} />} />
-            {/* ADMIN ORDER ROUTES */}
-            <Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />
-            {/* ADMIN USERS ROUTES */}
-            <Route path="/admins/users" element={<AdminCreateUserForm />} />
-            <Route path="/admins/drivers" element={<DriverUserList />} />
-            <Route path="/admins/shippers" element={<ShipperUserList />} />
-            <Route path="/admins/users/:userId" element={<AdminUserDetails />} />
-            <Route path="/admins/users/:userId/edit" element={<AdminUpdateUserForm />} />
+            {user.role === 'shipper' ?
+              <>
+                <Route path="/shippers/orders" element={<OrderDashboard user={user} formatTimestamp={formatTimestamp} />} />
+                <Route path="/shippers/orders/new" element={<ShipperOrderForm user={user} formatTimestamp={formatTimestamp} />} />
+                <Route path="/shippers/orders/:id" element={<OrderDetails formatTimestamp={formatTimestamp} />} />
+                <Route path="/shippers/orders/:orderId/edit" element={<ShipperOrderForm user={user} />} />
+              </> : <></>
+            }
+            {user.role === 'admin' ?
+              <>
+                {/* ADMIN ORDER ROUTES */}
+                < Route path="/admin/orders/new" element={<AdminOrderForm user={user} />} />
+                {/* ADMIN USERS ROUTES */}
+                <Route path="/admins/users" element={<AdminCreateUserForm />} />
+                <Route path="/admins/drivers" element={<DriverUserList />} />
+                <Route path="/admins/shippers" element={<ShipperUserList />} />
+                <Route path="/admins/users/:userId" element={<AdminUserDetails />} />
+                <Route path="/admins/users/:userId/edit" element={<AdminUpdateUserForm />} />
+              </> : <></>
+            }
             {/* PROFILES */}
             <Route path="/users/:userId" element={<UserDetails user={user} handleDelete={handleDelete} />} />
             <Route path="/users/:userId/edit" element={<UsersForm user={user} />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer, useLoadScript, Autocomplete } from "@react-google-maps/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 import adminUserServices from "../../services/adminUser/adminUserServices";
@@ -10,6 +10,7 @@ import shipperServices from "../../services/shipperOrder/shipperServices";
 const libraries = ["places"];
 
 const OrderForm = ({ user }) => {
+  const navigate = useNavigate();
   const { orderId } = useParams();
   const [mapCenter, setMapCenter] = useState({ lat: 24.7136, lng: 46.6753 });
 
@@ -179,8 +180,8 @@ const OrderForm = ({ user }) => {
         else {
           await shipperServices.newShipperOrder({ ...formData, paymentAmount });
         }
-
       }
+      navigate(`/${user.role}s/orders`)
     } catch (error) {
       console.log("Error submitting order:", error);
     }
