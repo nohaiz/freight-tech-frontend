@@ -21,6 +21,21 @@ const Navbar = ({ user, handleSignout }) => {
               <Link className="navbar-item" to={`/${user.role}s/orders`}>Dashboard</Link>
               <Link className="navbar-item" to={`/users/${user.userId}`}>Profile</Link>
             </div>
+            <Link to="/admin/orders/shippers">All Shippers</Link>
+                
+                <li>
+                  <Link to="/admin/orders/drivers">All Drivers</Link>
+                </li>
+                <li>
+                  <Link to="/admin/orders">All Orders</Link>
+                </li>
+                <li>
+                  <Link to="/admin/orders/claimed">Claimed Orders</Link> 
+                </li>
+                <li>
+                  <Link to="/admin/orders/unclaimed">Unclaimed Orders</Link>
+                </li>
+
             <div className="navbar-end">
               <a className="navbar-item" onClick={handleSignout} href="/" style={{ cursor: 'pointer' }}>
                 Sign Out
