@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./OrderDetail.css";
 
@@ -17,7 +17,7 @@ const AdminOrderDetails = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const shipperData = await adminOrderServices.AdminUserOrderDetails (id);
+        const shipperData = await adminOrderServices.AdminUserOrderDetails(id);
         setOrderDetails(shipperData)
       } catch (err) {
       }

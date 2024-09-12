@@ -12,7 +12,6 @@ const AdminClaimedOrderList = () => {
         const allOrders = await adminOrderServices.indexOrders();
         const claimedOrders = allOrders.filter(order => order.driverId);  
         setOrders(claimedOrders);
-        console.log(claimedOrders);
       } catch (error) {
       }
     };

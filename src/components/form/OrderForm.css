@@ -1,0 +1,11 @@
+.columns {
+    min-height: 100vh; 
+  }
+  
+  .map-container {
+    height: 100%; 
+  }
+  
+  #form-inputs {
+    margin: 10px;
+  }

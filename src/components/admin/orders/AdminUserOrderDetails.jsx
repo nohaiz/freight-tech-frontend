@@ -15,7 +15,7 @@ const AdminUserOrderDetails = () => {
     const fetchOrderDetails = async () => {
       try {
         const shipperData = await adminOrderServices.adminOrderDetails(orderId);
-        const driverName = await adminUserServices.showUser(shipperData.driverId)
+        // driverName = await adminUserServices.showUser(shipperData.driverId)
         setDriverName(driverName)
         setOrderDetails(shipperData);
       } catch (err) {

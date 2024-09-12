@@ -12,7 +12,6 @@ const AdminOrderList = () => {
       try {
         const allOrders = await adminOrderServices.indexOrders();  
         setOrders(allOrders);
-        console.log(orders)
       } catch (error) {
       }
     };
