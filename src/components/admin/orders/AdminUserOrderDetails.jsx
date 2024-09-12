@@ -11,29 +11,30 @@ const AdminUserOrderDetails = () => {
   const navigate = useNavigate();
   const [driverName , setDriverName] = useState("")
 
-  useEffect(() => {
-    const fetchOrderDetails = async () => {
-      try {
-        const shipperData = await adminOrderServices.adminOrderDetails(orderId);
-        // driverName = await adminUserServices.showUser(shipperData.driverId)
-        setDriverName(driverName)
-        setOrderDetails(shipperData);
-      } catch (err) {
-      }
-    };
+  const fetchOrderDetails = async () => {
+    try {
+      const shipperData = await adminOrderServices.adminOrderDetails(orderId);
+      // driverName = await adminUserServices.showUser(shipperData.driverId)
+      setDriverName(driverName)
+      setOrderDetails(shipperData);
+    } catch (err) {
+      console.log(err)
+    }
+  };
 
-    const fetchUsers = async () => {
-      try {
-        const allUsers = await adminUserServices.indexUsers();
-        
-        const driverUsers = allUsers.filter((user) => user.roles.includes("driver"));
+  const fetchUsers = async () => {
+    try {
+      const allUsers = await adminUserServices.indexUsers();
+      
+      const driverUsers = allUsers.filter((user) => user.roles.includes("driver"));
+   
+      setDrivers(driverUsers);
+    } catch (err) {
      
-        setDrivers(driverUsers);
-      } catch (err) {
-       
-      }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchOrderDetails();
     fetchUsers();
   }, [orderId]);
@@ -43,6 +44,8 @@ const AdminUserOrderDetails = () => {
       const updatedOrder = { ...orderDetails, driverId: selectedDriverId };
       await adminOrderServices.updateAdminOrder(orderId, updatedOrder); 
       setOrderDetails(updatedOrder); 
+      fetchOrderDetails();
+      fetchUsers();
     } catch (err) {
     }
   };
@@ -81,7 +84,7 @@ const AdminUserOrderDetails = () => {
       <tbody>
         <tr>
           <td>{orderDetails.orderId}</td>
-          <td>{driverName.username}</td>
+          <td>{orderDetails.driverId}</td>
           <td>{orderDetails.pickupLocation}</td>
           <td>{orderDetails.dropoffLocation}</td>
           <td>{orderDetails.orderStatus}</td>

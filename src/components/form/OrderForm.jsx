@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import adminUserServices from "../../services/adminUser/adminUserServices";
 import adminOrderServices from "../../services/adminOrder/adminOrderServices";
 import shipperServices from "../../services/shipperOrder/shipperServices";
+import '../form/OrderForm.css';
 
 const libraries = ["places"];
 
@@ -212,106 +213,141 @@ const OrderForm = ({ user }) => {
   if (!isLoaded) return <div>Loading Maps...</div>;
 
   return (
+    
     <main>
-      <GoogleMap
-        mapContainerStyle={{ height: "350px", width: "100%" }}
-        zoom={10}
-        center={mapCenter}
-      >
-        {directions && <DirectionsRenderer directions={directions} />}
-      </GoogleMap>
 
-      <form onSubmit={handleSubmit}>
-        {user.role === 'admin' ?
-          <>
-            <label htmlFor="customerId">Shipper</label>
-            <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
-              <option value={"null"}>None</option>
-              {userData.filter(user => user.roles.includes('shipper')).map(user => (
-                <option key={user.userId} value={user.userId}>{user.username}</option>
-              ))}
-            </select>
-            <label htmlFor="driverId">Driver</label>
-            <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
-              <option value={"null"}>None</option>
-              {userData.filter(user => user.roles.includes('driver')).map(user => (
-                <option key={user.userId} value={user.userId}>{user.username}</option>
-              ))}
-            </select>
-          </>
+      <section className="section has-background-light">
+      <div className="columns is vcentered" style={{ minHeight: "100vh" }}> 
+      <div className="column is-half">
+        <form className="form-container" style={{ minWidth: "100%" }} onSubmit={handleSubmit}>
+          {user.role === 'admin' ?
+            <>
+              <label htmlFor="customerId">Shipper</label>
+              <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
+                <option value={"null"}>None</option>
+                {userData.filter(user => user.roles.includes('shipper')).map(user => (
+                  <option key={user.userId} value={user.userId}>{user.username}</option>
+                ))}
+              </select>
+              <label htmlFor="driverId">Driver</label>
+              <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
+                <option value={"null"}>None</option>
+                {userData.filter(user => user.roles.includes('driver')).map(user => (
+                  <option key={user.userId} value={user.userId}>{user.username}</option>
+                ))}
+              </select>
+            </>
 
-          :
-          <></>
-        }
+            :
+            <></>
+          }
 
-        <label htmlFor="pickupLocation">Pick-up</label>
-        <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
+          <div  className="field is-horizontal">
+            <div id="form-inputs" className="field is-veritcal">
+              <label htmlFor="pickupLocation" style={{ color: 'gray' }}>Origin</label>
+              <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
+                <input
+                  class="input is-small"
+                  placeholder="Pick-up Address"
+                  required
+                  type="text"
+                  name="pickupLocation"
+                  id="pickupLocation"
+                  value={formData.pickupLocation}
+                  onChange={handleChange}
+                  />
+              </Autocomplete>
+            </div>
+
+            <div id="form" className="field is-horizontal">
+            <div id="form-inputs" className="field is-veritcal">
+            <label htmlFor="dropoffLocation" style={{ color: 'gray' }}>Destination</label>
+            <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
+              <input
+                class="input is-small"
+                placeholder="Drop off Address"
+                required
+                type="text"
+                name="dropoffLocation"
+                id="dropoffLocation"
+                value={formData.dropoffLocation}
+                onChange={handleChange}
+              />
+            </Autocomplete>
+            </div>
+            </div>
+
+          </div>
+          <p>Order status: Pending</p>
+
+          <label htmlFor="weightValue" style={{ color: 'gray' }}>Weight</label>
           <input
-            placeholder="Pick-up Address"
+            class="input is-small"
+            placeholder="Weight"
             required
             type="text"
-            name="pickupLocation"
-            id="pickupLocation"
-            value={formData.pickupLocation}
+            name="weightValue"
+            id="weightValue"
+            value={formData.weightValue}
             onChange={handleChange}
           />
-        </Autocomplete>
 
-        <label htmlFor="dropoffLocation">Dropoff</label>
-        <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
+          <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
+
+          <label htmlFor="dimensions" style={{ color: 'gray' }}>Dimensions</label>
           <input
-            placeholder="Drop off Address"
+            class="input is-small"
+            placeholder="Dimensions"
             required
             type="text"
-            name="dropoffLocation"
-            id="dropoffLocation"
-            value={formData.dropoffLocation}
+            name="dimensions"
+            id="dimensions"
+            value={formData.dimensions}
             onChange={handleChange}
           />
-        </Autocomplete>
-        <p>Order status: Pending</p>
 
-        <label htmlFor="weightValue">Weight</label>
-        <input
-          placeholder="Weight"
-          required
-          type="text"
-          name="weightValue"
-          id="weightValue"
-          value={formData.weightValue}
-          onChange={handleChange}
-        />
+          <label htmlFor="vehicleType" style={{ color: 'gray' }}>Vehicle type</label>
+          <span class="select">
+          <select
+            class="dropdown"
+            required
+            name="vehicleType"
+            id="vehicleType"
+            value={formData.vehicleType}
+            onChange={handleChange}
+          >
+            <option value="car">Car</option>
+            <option value="truck">Truck</option>
+            <option value="van">Van</option>
+          </select>
+          </span>
 
-        <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
+          <p>Delivery time: {formData.deliveryTime || "0"}</p>
 
-        <label htmlFor="dimensions">Dimensions</label>
-        <input
-          placeholder="Dimensions"
-          required
-          type="text"
-          name="dimensions"
-          id="dimensions"
-          value={formData.dimensions}
-          onChange={handleChange}
-        />
+          <button class="button is-primary" id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
+        
+        </form>
+        
+      </div>
 
-        <label htmlFor="vehicleType">Vehicle type</label>
-        <select
-          required
-          name="vehicleType"
-          id="vehicleType"
-          value={formData.vehicleType}
-          onChange={handleChange}
-        >
-          <option value="car">Car</option>
-          <option value="truck">Truck</option>
-          <option value="van">Van</option>
-        </select>
+      <div className="column is-half">
+        <div  className="map-container" style={{ height: "100%" }}>
+          <GoogleMap
+            mapContainerStyle={{ height: "100%", width: "100%" }}
+            zoom={11}
+            center={mapCenter}
+            options={{
+              disableDefaultUI: true, 
+            }}
+            >
+            {directions && <DirectionsRenderer directions={directions} />}
+          </GoogleMap>
+        </div>
+      </div>
 
-        <p>Delivery time: {formData.deliveryTime || "0"}</p>
+          </div>
+      </section>
 
-        <button id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
-      </form>
     </main>
   );
 }
