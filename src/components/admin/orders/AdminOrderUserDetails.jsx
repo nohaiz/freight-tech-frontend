@@ -4,6 +4,7 @@ import adminOrderServices from "../../../services/adminOrder/adminOrderServices"
 import adminUserServices from "../../../services/adminUser/adminUserServices";  
 import "bulma/css/bulma.min.css";
 
+
 const AdminOrderUserDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
@@ -78,7 +79,6 @@ const AdminOrderUserDetails = () => {
                 <div>
                   <p><strong>Active Orders:</strong> {assignedOrders.length}</p>
                   <p><strong>Total Orders:</strong> {allOrders.length}</p>
-
                   <div>
                     <label>Assign an Order: </label>
                     <select

@@ -25,7 +25,6 @@ const newAdminOrder = async (formData) => {
 }
 
 const updateAdminOrder = async (id, formData) => {
-  console.log(id,formData)
   try {
     const res = await fetch(`${BASE_URL}/admin/orders/${id}`, {
       method: 'PUT',
@@ -150,6 +149,27 @@ const getAllDrivers = async () => {
   }
 };
 
+const getOrdersByUserId = async (userId) => {
+  try {
+    const res = await fetch(`${BASE_URL}/admin/orders?userId=${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+    const data = await res.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching orders by userId", error);
+    throw error;
+  }
+};
 
 
-export default { getAllDrivers, indexOrders, showUserOrders, newAdminOrder, updateAdminOrder, adminOrderDetails, deleteOrder, }
+
+export default { getOrdersByUserId,
+getAllDrivers, indexOrders, showUserOrders, newAdminOrder, updateAdminOrder, adminOrderDetails, deleteOrder, }

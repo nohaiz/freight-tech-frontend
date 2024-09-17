@@ -58,6 +58,10 @@ const AdminUserOrderDetails = () => {
     }
   };
 
+  const handleEditOrder = () => {
+    navigate(`/admin/orders/${orderId}/edit`);
+  };
+
   return (
     <>
 
@@ -114,8 +118,10 @@ const AdminUserOrderDetails = () => {
               )}
             </select>
           </div>
-            <button className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
-            <button className="button is-danger ml-2" onClick={handleDeleteOrder}>Cancel Order</button>
+            <button id="view" className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
+            <button id="edit" className="button" onClick={handleEditOrder} >Edit Order</button>
+            <button id="cancel" className="button is-danger ml-2" onClick={handleDeleteOrder}>Cancel Order</button>
+              
           </td>
 
         </tr>

@@ -1,6 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "./OrderDetail.css";
 
 import adminOrderServices from "../../services/admin/adminOrderServices";
 
@@ -42,6 +41,7 @@ const AdminOrderDetails = () => {
         <>
           <button type="button" onClick={() => { deleteOrder() }}>Delete Order</button>
           <button type="button"><Link to={`/admin/orders/${orderDetails.orderId}/edit`}>Edit Order</Link></button>
+
         </>
         : <></>
       }

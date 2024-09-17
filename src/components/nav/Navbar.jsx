@@ -76,7 +76,7 @@ const Navbar = ({ user, handleSignout }) => {
                       <Link to="/admin/orders/new" className="dropdown-item">New Order</Link>
                       <Link to="/admin/orders/shippers" className="dropdown-item">All Shippers</Link>
                       <Link to="/admin/orders/drivers" className="dropdown-item">All Drivers</Link>
-                      <Link to="/admin/orders" className="dropdown-item">All Orders</Link>
+                      <Link to="/admins/orders" className="dropdown-item">All Orders</Link>
                       <Link to="/admin/orders/claimed" className="dropdown-item">Claimed Orders</Link>
                       <Link to="/admin/orders/unclaimed" className="dropdown-item">Unclaimed Orders</Link>
                     </div>

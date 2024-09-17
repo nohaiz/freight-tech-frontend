@@ -5,6 +5,7 @@ import adminUserServices from "../../../services/adminUser/adminUserServices";
 const AdminShipperList = () => {
   const [shippers, setShippers] = useState([]);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,7 +23,7 @@ const AdminShipperList = () => {
 
   
   const handleViewOrders = (userId) => {
-    navigate(`/admin/orders?userId=${userId}`); 
+    navigate(`/admins/orders?userId=${userId}`); 
   };
 
   return (
