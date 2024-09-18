@@ -341,7 +341,7 @@ const OrderForm = ({ user, formatTimestamp }) => {
                 </select>
               </span>
 
-              <p>Delivery time: {formData.deliveryTime || "0"}</p>
+              <label className="custom-style">Delivery time: {formData.deliveryTime || "0"}</label>
 
               <button class="button is-primary" id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
 
