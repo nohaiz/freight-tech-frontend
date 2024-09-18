@@ -38,3 +38,6 @@ a.navbar-item:focus {
 ul {
   display: flex;
 }
+.custom-nav-btn {
+  background-color: black;
+}

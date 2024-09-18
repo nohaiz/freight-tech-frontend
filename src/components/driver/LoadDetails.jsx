@@ -10,6 +10,10 @@ const mapContainerStyle = {
   width: "100%",
   height: "350px",
 };
+const mapOptions = {
+  mapTypeControl: false,
+  zoomControl: false,
+};
 
 const LoadDetails = ({ user, formatTimestamp }) => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -107,6 +111,7 @@ const LoadDetails = ({ user, formatTimestamp }) => {
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 zoom={12}
+                options={mapOptions}
               >
                 {directionsResponse && <DirectionsRenderer directions={directionsResponse} />}
               </GoogleMap>
@@ -128,6 +133,7 @@ const LoadDetails = ({ user, formatTimestamp }) => {
           </div>
         </div >
       </section >
+      <br />
     </div >
   );
 };

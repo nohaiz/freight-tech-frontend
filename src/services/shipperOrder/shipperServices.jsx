@@ -33,24 +33,32 @@ const shipperOrderDetails = async (id) => {
 }
 
 const updateShipperOrder = async (id, formData) => {
+  console.log("Updating order with ID:", id);
+  console.log("Form Data:", formData);
+
   try {
     const res = await fetch(`${BASE_URL}/shippers/orders/${id}`, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(formData),
     });
-    const json = await res.json();
-    if (json.error) {
-      throw new Error(json.error)
+
+    if (!res.ok) {
+      const errorText = await res.text(); // Get response text
+      console.error("Error response:", errorText); // Log the response text
+      throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
     }
-    return json
+
+    const json = await res.json();
+    return json;
   } catch (err) {
-    console.log(err)
+    console.error("Error during order update:", err);
   }
-}
+};
+
 
 const deleteShipperOrder = async (id) => {
   try {

@@ -30,6 +30,11 @@
   width: 100vw;
 }
 
+.custom-placement {
+  display: flex;
+  justify-content: center;
+}
+
 .custom-img img {
   width: 100%;
   height: auto;

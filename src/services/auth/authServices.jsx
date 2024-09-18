@@ -74,4 +74,6 @@ const signout = () => {
   window.localStorage.removeItem("token");
 };
 
+
+
 export default { getUser, signup, signin, signout };

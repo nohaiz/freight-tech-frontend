@@ -1,0 +1,22 @@
+.main-map {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-content-map {
+  margin: 0px;
+  border: 10px solid black;
+}
+
+.form-container-map {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: black;
+  width: 55vw;
+}
+
+.form-container-map label,
+p {
+  color: white;
+}

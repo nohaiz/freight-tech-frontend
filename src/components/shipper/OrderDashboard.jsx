@@ -31,7 +31,7 @@ const OrderDashboard = ({ user, formatTimestamp }) => {
     };
 
     const claimedOrders = () => {
-      const filtered = shipper.filter(status => status.orderStatus === 'pending');
+      const filtered = shipper.filter((order) => order.orderStatus === 'pending' && order.driverId);
       setFilteredData(sortByOrderId(filtered));
       setActiveTab('claimed');
     };

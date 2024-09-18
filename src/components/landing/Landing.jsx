@@ -4,7 +4,7 @@ const Landing = () => {
   return (
     <section className="column is-vcentered">
       <section className="hero is-small">
-        <div className="hero-body">
+        <div className="hero-body custom-placement">
           <h1 className="title is-1">Freight Tech</h1>
         </div>
       </section>
