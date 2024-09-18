@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { GoogleMap, DirectionsRenderer, useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { useNavigate, useParams } from "react-router-dom";
 
-import './form.css'
+import './OrderForm.css'
 
 import adminUserServices from "../../services/adminUser/adminUserServices";
 import adminOrderServices from "../../services/adminOrder/adminOrderServices";
@@ -282,28 +282,26 @@ const OrderForm = ({ user, formatTimestamp }) => {
                   </Autocomplete>
                 </div>
 
-                <div id="form" className="field is-horizontal">
-                  <div id="form-inputs" className="field is-veritcal">
-                    <label htmlFor="dropoffLocation" style={{ color: 'gray' }}>Destination</label>
-                    <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
-                      <input
-                        class="input is-small"
-                        placeholder="Drop off Address"
-                        required
-                        type="text"
-                        name="dropoffLocation"
-                        id="dropoffLocation"
-                        value={formData.dropoffLocation}
-                        onChange={handleChange}
-                      />
-                    </Autocomplete>
-                  </div>
+                <div id="form-inputs" className="field is-veritcal">
+                  <label htmlFor="dropoffLocation" style={{ color: 'gray' }}>Destination</label>
+                  <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
+                    <input
+                      class="input is-small"
+                      placeholder="Drop off Address"
+                      required
+                      type="text"
+                      name="dropoffLocation"
+                      id="dropoffLocation"
+                      value={formData.dropoffLocation}
+                      onChange={handleChange}
+                    />
+                  </Autocomplete>
                 </div>
-
               </div>
-              <p>Order status: Pending</p>
 
-              <label htmlFor="weightValue">Weight</label>
+              <label className="custom-style">Order status: Pending</label>
+
+              <label htmlFor="weightValue" style={{ color: 'gray' }}>Weight</label>
               <input
                 placeholder="Weight"
                 required
@@ -314,9 +312,9 @@ const OrderForm = ({ user, formatTimestamp }) => {
                 onChange={handleChange}
               />
 
-              <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
+              <label className="custom-style">Rate: {paymentAmount ? paymentAmount : 0} BD</label>
 
-              <label htmlFor="dimensions">Dimensions</label>
+              <label htmlFor="dimensions" style={{ color: 'gray' }}>Dimensions</label>
               <input
                 placeholder="Dimensions"
                 required
