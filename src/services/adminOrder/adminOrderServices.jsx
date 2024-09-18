@@ -162,7 +162,7 @@ const getOrdersByUserId = async (userId) => {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }
     const data = await res.json();
-    return data; 
+    return data;
   } catch (error) {
     console.error("Error fetching orders by userId", error);
     throw error;
@@ -171,5 +171,7 @@ const getOrdersByUserId = async (userId) => {
 
 
 
-export default { getOrdersByUserId,
-getAllDrivers, indexOrders, showUserOrders, newAdminOrder, updateAdminOrder, adminOrderDetails, deleteOrder, }
+export default {
+  getOrdersByUserId,
+  getAllDrivers, indexOrders, showUserOrders, newAdminOrder, updateAdminOrder, adminOrderDetails, deleteOrder,
+}

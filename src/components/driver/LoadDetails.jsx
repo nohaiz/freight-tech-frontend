@@ -11,7 +11,6 @@ const mapContainerStyle = {
   height: "350px",
 };
 const mapOptions = {
-  zoomControl: true,
   mapTypeControl: false,
   zoomControl: false,
 };
