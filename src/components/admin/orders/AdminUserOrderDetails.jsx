@@ -99,25 +99,27 @@ const AdminUserOrderDetails = () => {
           <td>{orderDetails.deliveryTime}</td>
           <td>{orderDetails.createdAt}</td>
           <td>
+            {orderDetails.orderStatus !== "completed" && (
           <div>
             <label htmlFor="drivers">Assign a Driver: </label>
-            <select
-              id="drivers"
-              value={selectedDriverId}
-              onChange={(e) => setSelectedDriverId(e.target.value)}
-              >
-              <option value="">Select a driver</option>
-              {drivers.length > 0 ? (
-                drivers.map((driver) => (
-                  <option key={driver.userId} value={driver.userId}>
-                    {driver.username}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No drivers available</option>
-              )}
-            </select>
+              <select
+                id="drivers"
+                value={selectedDriverId}
+                onChange={(e) => setSelectedDriverId(e.target.value)}
+                >
+                <option value="">Select a driver</option>
+                {drivers.length > 0 ? (
+                  drivers.map((driver) => (
+                    <option key={driver.userId} value={driver.userId}>
+                      {driver.username}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No drivers available</option>
+                )}
+              </select>
           </div>
+            )}
           {orderDetails.orderStatus !== "completed" && (
             <>
             <button id="view" className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
