@@ -7,6 +7,7 @@ import './form.css'
 import adminUserServices from "../../services/adminUser/adminUserServices";
 import adminOrderServices from "../../services/adminOrder/adminOrderServices";
 import shipperServices from "../../services/shipperOrder/shipperServices";
+import '../form/OrderForm.css';
 
 const libraries = ["places"];
 
@@ -145,7 +146,7 @@ const OrderForm = ({ user }) => {
         case 'car':
           amount *= 1.2;
           break;
-        case 'suv':
+        case 'van':
           amount *= 1.5;
           break;
         case 'truck':
@@ -214,69 +215,74 @@ const OrderForm = ({ user }) => {
   if (!isLoaded) return <div>Loading Maps...</div>;
 
   return (
-    <main className="main-map">
-      <form onSubmit={handleSubmit} className="form-container-map">
-        <h1 className="title is-2 has-text-centered custom-title">{orderId ? 'Update Order' : 'New Order'}</h1>
-        {user.role === 'admin' ?
-          <>
-            <label htmlFor="customerId" className="label has-text-white">Shipper</label>
-            <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
-              <option value={`${user.role === 'admin' ? '0' : null}`}>None</option>
-              {userData.filter(user => user.roles.includes('shipper')).map(user => (
-                <option key={user.userId} value={user.userId}>{user.username}</option>
-              ))}
-            </select>
-            <label htmlFor="driverId" className="label has-text-white">Driver</label>
-            <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
-              <option value={`${user.role === 'admin' ? '0' : null}`}>None</option>
-              {userData.filter(user => user.roles.includes('driver')).map(user => (
-                <option key={user.userId} value={user.userId}>{user.username}</option>
-              ))}
-            </select>
-          </>
+    
+    <main>
 
-          :
-          <></>
-        }
-        <label htmlFor="pickupLocation" className="label has-text-white">Pick-up</label>
-        <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
-          <input
-            placeholder="Pick-up Address"
-            required
-            type="text"
-            name="pickupLocation"
-            id="pickupLocation"
-            value={formData.pickupLocation}
-            onChange={handleChange}
-            className="input"
-          />
-        </Autocomplete>
+      <section className="section has-background-light">
+      <div className="columns is vcentered" style={{ minHeight: "100vh" }}> 
+      <div className="column is-half">
+        <form className="form-container" style={{ minWidth: "100%" }} onSubmit={handleSubmit}>
+          {user.role === 'admin' ?
+            <>
+              <label htmlFor="customerId">Shipper</label>
+              <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
+                <option value={"null"}>None</option>
+                {userData.filter(user => user.roles.includes('shipper')).map(user => (
+                  <option key={user.userId} value={user.userId}>{user.username}</option>
+                ))}
+              </select>
+              <label htmlFor="driverId">Driver</label>
+              <select name="driverId" id="driverId" value={formData.driverId} onChange={handleChange}>
+                <option value={"null"}>None</option>
+                {userData.filter(user => user.roles.includes('driver')).map(user => (
+                  <option key={user.userId} value={user.userId}>{user.username}</option>
+                ))}
+              </select>
+            </>
 
-        <label htmlFor="dropoffLocation" className="label has-text-white">Dropoff</label>
-        <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
-          <input
-            placeholder="Drop off Address"
-            required
-            type="text"
-            name="dropoffLocation"
-            id="dropoffLocation"
-            value={formData.dropoffLocation}
-            onChange={handleChange}
-            className="input"
-          />
-        </Autocomplete>
+            :
+            <></>
+          }
 
-        <label htmlFor="orderStatus" className="label has-text-white">Order status:</label>
-        <input
-          type="text"
-          name="orderStatus"
-          id="orderStatus"
-          value={formData.orderStatus}
-          className="input"
-          readOnly
-        />
+          <div  className="field is-horizontal">
+            <div id="form-inputs" className="field is-veritcal">
+              <label htmlFor="pickupLocation" style={{ color: 'gray' }}>Origin</label>
+              <Autocomplete onLoad={onLoadPickup} onPlaceChanged={onPlaceChangedPickup}>
+                <input
+                  class="input is-small"
+                  placeholder="Pick-up Address"
+                  required
+                  type="text"
+                  name="pickupLocation"
+                  id="pickupLocation"
+                  value={formData.pickupLocation}
+                  onChange={handleChange}
+                  />
+              </Autocomplete>
+            </div>
 
-        <label htmlFor="weightValue" className="label has-text-white">Weight</label>
+            <div id="form" className="field is-horizontal">
+            <div id="form-inputs" className="field is-veritcal">
+            <label htmlFor="dropoffLocation" style={{ color: 'gray' }}>Destination</label>
+            <Autocomplete onLoad={onLoadDropoff} onPlaceChanged={onPlaceChangedDropoff}>
+              <input
+                class="input is-small"
+                placeholder="Drop off Address"
+                required
+                type="text"
+                name="dropoffLocation"
+                id="dropoffLocation"
+                value={formData.dropoffLocation}
+                onChange={handleChange}
+              />
+            </Autocomplete>
+            </div>
+            </div>
+
+          </div>
+          <p>Order status: Pending</p>
+
+        <label htmlFor="weightValue">Weight</label>
         <input
           placeholder="Weight"
           required
@@ -285,20 +291,11 @@ const OrderForm = ({ user }) => {
           id="weightValue"
           value={formData.weightValue}
           onChange={handleChange}
-          className="input"
         />
 
-        <label htmlFor="paymentAmount" className="label has-text-white">Rate</label>
-        <input
-          type="text"
-          name="paymentAmount"
-          id="paymentAmount"
-          value={paymentAmount}
-          className="input"
-          readOnly
-        />
+          <p>Rate: {paymentAmount ? paymentAmount : 0} BD</p>
 
-        <label htmlFor="dimensions" className="label has-text-white">Dimensions</label>
+        <label htmlFor="dimensions">Dimensions</label>
         <input
           placeholder="Dimensions"
           required
@@ -307,44 +304,50 @@ const OrderForm = ({ user }) => {
           id="dimensions"
           value={formData.dimensions}
           onChange={handleChange}
-          className="input"
         />
 
-        <label htmlFor="vehicleType" className="label has-text-white">Vehicle type</label>
-        <select
-          required
-          name="vehicleType"
-          id="vehicleType"
-          value={formData.vehicleType}
-          onChange={handleChange}
-        >
-          <option value="car">Car</option>
-          <option value="truck">Truck</option>
-          <option value="van">Van</option>
-        </select>
+          <label htmlFor="vehicleType" style={{ color: 'gray' }}>Vehicle type</label>
+          <span class="select">
+          <select
+            class="dropdown"
+            required
+            name="vehicleType"
+            id="vehicleType"
+            value={formData.vehicleType}
+            onChange={handleChange}
+          >
+            <option value="car">Car</option>
+            <option value="truck">Truck</option>
+            <option value="van">Van</option>
+          </select>
+          </span>
 
-        <label htmlFor="deliveryTime" className="label has-text-white">Delivery time</label>
-        <input
-          placeholder="Delivery Time"
-          type="text"
-          name="deliveryTime"
-          id="deliveryTime"
-          value={formData.deliveryTime || "0"}
-          onChange={handleChange}
-          className="input"
-        />
+          <p>Delivery time: {formData.deliveryTime || "0"}</p>
 
-        <button id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
-      </form>
-      <div className="content custom-content-map">
-        <GoogleMap
-          mapContainerStyle={{ height: "100vh", width: "45vw" }}
-          zoom={10}
-          center={mapCenter}
-        >
-          {directions && <DirectionsRenderer directions={directions} />}
-        </GoogleMap>
+          <button class="button is-primary" id="submit" type="submit">{orderId ? 'Update' : 'Submit'}</button>
+        
+        </form>
+        
       </div>
+
+      <div className="column is-half">
+        <div  className="map-container" style={{ height: "100%" }}>
+          <GoogleMap
+            mapContainerStyle={{ height: "100%", width: "100%" }}
+            zoom={11}
+            center={mapCenter}
+            options={{
+              disableDefaultUI: true, 
+            }}
+            >
+            {directions && <DirectionsRenderer directions={directions} />}
+          </GoogleMap>
+        </div>
+      </div>
+
+          </div>
+      </section>
+
     </main>
   );
 }

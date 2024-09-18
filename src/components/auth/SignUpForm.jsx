@@ -85,7 +85,7 @@ const SignUpForm = (prop) => {
       <div className="columns is-vcentered">
         <div className="column">
           <form onSubmit={handleSubmit} className="sign-up-form-container">
-            <h1 className="title is-2 has-text-centered">Sign Up</h1>
+            <h1 className="title is-2 has-text-centered custom-title">Sign Up</h1>
             <div className="custom-field">
               {errors.general && <p className="notification is-danger">{errors.general}</p>}
               <label className="label has-text-white">Username</label>
