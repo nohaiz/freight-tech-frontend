@@ -79,13 +79,16 @@ const AdminOrderList = () => {
                 >
                   View Details
                 </button>
-                <button
-                  id="cancel"
-                  className="button is-danger ml-2"
-                  onClick={() => handleDeleteOrder(order.orderId)}
-                >
-                  Cancel Order
-                </button>
+                
+                {order.orderStatus !== "completed" && (
+                  <button
+                    id="cancel"
+                    className="button is-danger ml-2"
+                    onClick={() => handleDeleteOrder(order.orderId)}
+                  >
+                    Cancel Order
+                  </button>
+                )}
 
               </td>
             </tr>
