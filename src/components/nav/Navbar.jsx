@@ -73,7 +73,7 @@ const Navbar = ({ user, handleSignout }) => {
                   </div>
                   <div className="dropdown-menu" id="order-dropdown-menu" role="menu">
                     <div className="dropdown-content">
-                      <Link to="/admin/orders/new" className="dropdown-item">New Order</Link>
+                      <Link to="/admin/orders/new" className="dropdown-item" onClick={() => {setTimeout(() => {window.location.reload();}, 0);}} >New Order</Link>
                       <Link to="/admin/orders/shippers" className="dropdown-item">All Shippers</Link>
                       <Link to="/admin/orders/drivers" className="dropdown-item">All Drivers</Link>
                       <Link to="/admins/orders" className="dropdown-item">All Orders</Link>
