@@ -62,6 +62,27 @@ const AdminUserOrderDetails = () => {
     navigate(`/admin/orders/${orderId}/edit`);
   };
 
+  const orderOnRoute = async (orderId) => {
+    try {
+      const updatedOrder = { ...orderDetails, orderStatus: 'on_route' };
+      await adminOrderServices.updateAdminOrder(orderId, updatedOrder);
+      setOrderDetails(updatedOrder); 
+    } catch (err) {
+      console.error("Error updating order status to 'on_route':", err);
+    }
+  };
+  
+  const completedOrder = async (orderId) => {
+    try {
+      const updatedOrder = { ...orderDetails, orderStatus: 'completed' };
+      await adminOrderServices.updateAdminOrder(orderId, updatedOrder);
+      setOrderDetails(updatedOrder); 
+    } catch (err) {
+      console.error("Error updating order status to 'completed':", err);
+    }
+  };
+  
+
   return (
     <>
 
@@ -123,6 +144,15 @@ const AdminUserOrderDetails = () => {
           {orderDetails.orderStatus !== "completed" && (
             <>
             <button id="view" className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
+            {orderDetails.driverId && orderDetails.orderStatus === 'pending' ? (
+                <button className="button is-fullwidth has-background-warning" type="button" onClick={() => orderOnRoute(orderDetails.orderId)}>Update to On Route</button>
+              ) : (<></>)
+              }
+              {orderDetails.orderStatus === 'on_route' ?
+                (<button className="button has-background-success	 is-fullwidth" type="button" onClick={() => completedOrder(orderDetails.orderId)}> Order Delivered</button>) :
+                (<></>)
+              }
+
             <button id="edit" className="button" onClick={handleEditOrder} >Edit Order</button>
             <button id="cancel" className="button is-danger ml-2" onClick={handleDeleteOrder}>Cancel Order</button>
             </>

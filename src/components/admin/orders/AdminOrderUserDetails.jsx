@@ -78,7 +78,7 @@ const AdminOrderUserDetails = () => {
               {user.roles.includes('driver') && (
                 <div>
                   <p><strong>Active Orders:</strong> {assignedOrders.length}</p>
-                  <p><strong>Total Orders:</strong> {allOrders.length}</p>
+                  <p><strong>Total Orders:</strong> {allOrders.filter(order => order.driverId === parseInt(userId)).length}</p>
                   <div>
                     <label>Assign an Order: </label>
                     <select
