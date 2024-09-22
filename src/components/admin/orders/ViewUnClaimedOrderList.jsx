@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
 
-const AdminClaimedOrderList = () => {
+const AdminUnclaimedOrderList = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
@@ -10,8 +10,9 @@ const AdminClaimedOrderList = () => {
     const fetchOrders = async () => {
       try {
         const allOrders = await adminOrderServices.indexOrders();
-        const claimedOrders = allOrders.filter(order => order.driverId);  
-        setOrders(claimedOrders);
+        const unclaimedOrders = allOrders.filter(order => !order.driverId);  
+        setOrders(unclaimedOrders);
+        console.log(unclaimedOrders);
       } catch (error) {
       }
     };
@@ -32,12 +33,11 @@ const AdminClaimedOrderList = () => {
 
   return (
     <div>
-      <h1>Claimed Order List</h1>
+      <h1 className="title-center">Unclaimed Order List</h1>
       <table>
         <thead>
           <tr>
             <th>Customer ID</th>
-            <th>Driver ID</th>
             <th>Pickup Location</th>
             <th>Dropoff Location</th>
             <th>Order Status</th>
@@ -48,17 +48,26 @@ const AdminClaimedOrderList = () => {
           {orders.map((order) => (
             <tr key={order.orderId}>
               <td>{order.customerId}</td>
-              <td>{order.driverId}</td>
               <td>{order.pickupLocation}</td>
               <td>{order.dropoffLocation}</td>
               <td>{order.orderStatus}</td>
               <td>
-                <button onClick={() => handleViewDetails(order.orderId)}>
+                <button 
+                className="button is-info"
+                id="view"
+                onClick={() => handleViewDetails(order.orderId)}>
                   View Details
                 </button>
-                <button onClick={() => handleDeleteOrder(order.orderId)}>
-                  Cancel Order
-                </button>
+
+                {order.orderStatus !== "completed" && (
+                  <button
+                  id="cancel"
+                  className="button is-danger ml-2"
+                  onClick={() => handleDeleteOrder(order.orderId)}>
+                    Cancel Order
+                  </button>
+                )} 
+                
               </td>
             </tr>
           ))}
@@ -68,4 +77,4 @@ const AdminClaimedOrderList = () => {
   );
 };
 
-export default AdminClaimedOrderList;
+export default AdminUnclaimedOrderList;

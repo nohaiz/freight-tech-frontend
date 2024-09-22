@@ -17,14 +17,14 @@ import ShipperOrderForm from "./components/shipper/ShipperOrderForm";
 
 // ADMIN ORDERS COMPONENTS
 import AdminOrderForm from "./components/admin/orders/AdminOrderForm";
-import AdminOrderList from "./components/admin/orders/AdminOrderList";
-import AdminClaimedOrderList from './components/admin/orders/AdminClaimedOrderList';
-import AdminUnClaimedOrderList from './components/admin/orders/AdminUnClaimedOrderList';
-import AdminDriverList from "./components/admin/orders/AdminDriverList";;
-import AdminShipperList from "./components/admin/orders/AdminShipperList";
-import AdminOrderUserDetails from "./components/admin/orders/AdminOrderUserDetails";
-import AdminUserOrderDetails from "./components/admin/orders/AdminUserOrderDetails";
-
+import ViewAllOrderList from "./components/admin/orders/ViewAllOrderList";
+import ViewClaimedOrderList from './components/admin/orders/ViewClaimedOrderList';
+import ViewUnClaimedOrderList from './components/admin/orders/ViewUnClaimedOrderList';
+import ViewDriverList from "./components/admin/orders/ViewDriverList";;
+import ViewShipperList from "./components/admin/orders/ViewShipperList";
+import DriverOrderDetails from "./components/admin/orders/DriverOrderDetails";
+import ViewOrderDetails from "./components/admin/orders/ViewOrderDetails";
+import ViewCompletedOrderList from "./components/admin/orders/ViewCompletedOrderList";
 
 // ADMIN USERS COMPONENTS
 import DriverUserList from "./components/admin/users/DriverUserList";
@@ -112,15 +112,16 @@ function App() {
             {/* ADMIN ORDER ROUTES */}
             {user.role === 'admin' ?
               <>
-                <Route path="/admins/orders" element={<AdminOrderList user={user} formatTimestamp={formatTimestamp} />} />
+                <Route path="/admins/orders" element={<ViewAllOrderList user={user} formatTimestamp={formatTimestamp} />} />
                 <Route path="/admin/orders/new" element={<AdminOrderForm user={user} formatTimestamp={formatTimestamp} />} />
-                <Route path="/admin/orders/claimed" element={<AdminClaimedOrderList user={user} />} />
-                <Route path="/admin/orders/unclaimed" element={<AdminUnClaimedOrderList user={user} />} />
-                <Route path="/admin/orders/drivers" element={<AdminDriverList />} />
-                <Route path="/admin/orders/shippers" element={<AdminShipperList />} />
-                <Route path="/admin/orders/:userId" element={<AdminOrderUserDetails />} />
-                <Route path="/admin/orders/:orderId/details" element={<AdminUserOrderDetails />} />
+                <Route path="/admin/orders/claimed" element={<ViewClaimedOrderList user={user} />} />
+                <Route path="/admin/orders/unclaimed" element={<ViewUnClaimedOrderList user={user} />} />
+                <Route path="/admin/orders/drivers" element={<ViewDriverList />} />
+                <Route path="/admin/orders/shippers" element={<ViewShipperList />} />
+                <Route path="/admin/orders/:userId" element={<DriverOrderDetails />} />
+                <Route path="/admin/orders/:orderId/details" element={<ViewOrderDetails />} />
                 <Route path="/admin/orders/:orderId/edit" element={<AdminOrderForm user={user} formatTimestamp={formatTimestamp} />} />
+                <Route path="/admins/orders/completed" element={<ViewCompletedOrderList user={user} formatTimestamp={formatTimestamp} />} />
 
                 {/* ADMIN USERS ROUTES */}
                 <Route path="/admins/users" element={<AdminCreateUserForm />} />

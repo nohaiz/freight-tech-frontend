@@ -5,7 +5,7 @@ import adminUserServices from "../../../services/adminUser/adminUserServices";
 import "bulma/css/bulma.min.css";
 
 
-const AdminOrderUserDetails = () => {
+const DriverOrderDetails = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [allOrders, setAllOrders] = useState([]); 
@@ -77,7 +77,7 @@ const AdminOrderUserDetails = () => {
 
               {user.roles.includes('driver') && (
                 <div>
-                  <p><strong>Active Orders:</strong> {assignedOrders.length}</p>
+                  <p><strong>Active Orders:</strong> {assignedOrders.filter(order => order.orderStatus !== 'completed').length}</p>
                   <p><strong>Total Orders:</strong> {allOrders.filter(order => order.driverId === parseInt(userId)).length}</p>
                   <div>
                     <label>Assign an Order: </label>
@@ -87,7 +87,7 @@ const AdminOrderUserDetails = () => {
                       >
                         <option value="" disabled>Select an order</option>
                         {allOrders
-                          .filter(order => !order.driverId || order.driverId !== parseInt(userId)) 
+                          .filter(order => (!order.driverId || order.driverId !== parseInt(userId)) && order.orderStatus !== 'completed')
                           .map(order => (
                             <option key={order.orderId} value={order.orderId}>
                               {order.pickupLocation} to {order.dropoffLocation} ({order.vehicleType})
@@ -95,7 +95,9 @@ const AdminOrderUserDetails = () => {
                           ))}
                     </select>
 
-                    <button className="button is-primary ml-2" onClick={handleAssignOrder}>
+                    <button className="button is-primary ml-2" onClick={async () => 
+                      {await handleAssignOrder();
+                      window.location.reload();}}>
                       Confirm Assign
                     </button>
                   </div>
@@ -108,13 +110,15 @@ const AdminOrderUserDetails = () => {
                         defaultValue=""
                       >
                         <option value="" disabled>Select an order</option>
-                        {assignedOrders.map(order => (
+                        {assignedOrders.filter(order => order.orderStatus !== 'completed').map(order => (
                           <option key={order.orderId} value={order.orderId}>
                             {order.pickupLocation} to {order.dropoffLocation}
                           </option>
                         ))}
                       </select>
-                      <button className="button is-danger ml-2" onClick={handleUnassignOrder}>
+                      <button className="button is-danger ml-2" onClick={async () => 
+                      {await handleUnassignOrder();
+                      window.location.reload();}}>
                         Confirm Unassign
                       </button>
                     </div>
@@ -129,4 +133,4 @@ const AdminOrderUserDetails = () => {
   );
 };
 
-export default AdminOrderUserDetails;
+export default DriverOrderDetails;

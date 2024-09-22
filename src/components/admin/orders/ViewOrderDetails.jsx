@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 import adminUserServices from "../../../services/adminUser/adminUserServices"; 
 
-const AdminUserOrderDetails = () => {
+const ViewOrderDetails = () => {
   const [orderDetails, setOrderDetails] = useState({});
   const [drivers, setDrivers] = useState([]);
   const [selectedDriverId, setSelectedDriverId] = useState('');
@@ -173,4 +173,4 @@ const AdminUserOrderDetails = () => {
   );
 };
 
-export default AdminUserOrderDetails;
+export default ViewOrderDetails;

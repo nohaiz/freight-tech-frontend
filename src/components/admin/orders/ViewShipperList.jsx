@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import adminUserServices from "../../../services/adminUser/adminUserServices";
 
-const AdminShipperList = () => {
+const ViewShipperList = () => {
   const [shippers, setShippers] = useState([]);
   const navigate = useNavigate();
   
@@ -59,4 +59,4 @@ const AdminShipperList = () => {
   );
 };
 
-export default AdminShipperList;
+export default ViewShipperList;
