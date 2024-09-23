@@ -41,7 +41,7 @@ const ViewCompletedOrderList = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="title-center">Completed Order List {userId ? `for User ${userId}` : ""}</h1>
+      <h1 id="table-title" className="title-center">Completed Order List</h1>
       <table className="table is-striped is-hoverable">
         <thead>
           <tr>

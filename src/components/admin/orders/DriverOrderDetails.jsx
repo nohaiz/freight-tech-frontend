@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";  
 import adminUserServices from "../../../services/adminUser/adminUserServices";  
 import "bulma/css/bulma.min.css";
+import "./adminOrder.css";
 
 
 const DriverOrderDetails = () => {
@@ -66,19 +67,19 @@ const DriverOrderDetails = () => {
   
   return (
     <div className="background">
-      <div className="box">
+      <div id="driverBox" className="box">
         <div className="content">
-          <h1 className="title">Driver Order Details</h1>
+          <h1 id="driverBox-title" className="title">Driver Order Details</h1>
           {user && (
             <div className="user-details">
-              <p><strong>Username:</strong> {user.username}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Verified User:</strong> {user.verifiedUser ? "Yes" : "No"}</p>
+              <p><strong id="li-title">Username:</strong> {user.username}</p>
+              <p><strong id="li-title">Email:</strong> {user.email}</p>
+              <p><strong id="li-title">Verified User:</strong> {user.verifiedUser ? "Yes" : "No"}</p>
 
               {user.roles.includes('driver') && (
-                <div>
-                  <p><strong>Active Orders:</strong> {assignedOrders.filter(order => order.orderStatus !== 'completed').length}</p>
-                  <p><strong>Total Orders:</strong> {allOrders.filter(order => order.driverId === parseInt(userId)).length}</p>
+                <div className="user-details">
+                  <p><strong id="li-title">Active Orders:</strong> {assignedOrders.filter(order => order.orderStatus !== 'completed').length}</p>
+                  <p><strong id="li-title">Total Orders:</strong> {allOrders.filter(order => order.driverId === parseInt(userId)).length}</p>
                   <div>
                     <label>Assign an Order: </label>
                     <select
@@ -95,7 +96,7 @@ const DriverOrderDetails = () => {
                           ))}
                     </select>
 
-                    <button className="button is-primary ml-2" onClick={async () => 
+                    <button id="edit" className="button is-primary ml-2" onClick={async () => 
                       {await handleAssignOrder();
                       window.location.reload();}}>
                       Confirm Assign
@@ -116,7 +117,7 @@ const DriverOrderDetails = () => {
                           </option>
                         ))}
                       </select>
-                      <button className="button is-danger ml-2" onClick={async () => 
+                      <button id="cancel" className="button is-danger ml-2" onClick={async () => 
                       {await handleUnassignOrder();
                       window.location.reload();}}>
                         Confirm Unassign

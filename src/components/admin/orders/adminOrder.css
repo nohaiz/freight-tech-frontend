@@ -23,4 +23,23 @@
   
 }
 
+#title{
+  color: black;
+}
 
+#table-title{
+  color: black;
+}
+
+#driverBox{
+  width: 100vh;
+}
+
+#driverBox-title{
+  text-align: center;
+  color: gray;
+}
+
+#li-title{
+  color: gray;
+}

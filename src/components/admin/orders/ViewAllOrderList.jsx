@@ -37,14 +37,11 @@ const ViewAllOrderList = () => {
   };
 
   const handleDeleteOrder = async (orderId) => {
-    const confirmed = window.confirm("Are you sure you want to delete this order?");
-    if (confirmed) {
     try {
       await adminOrderServices.deleteOrder(orderId);
       setOrders(orders.filter((order) => order.orderId !== orderId)); 
     } catch (error) {
       setErrorMessage("Failed to delete the order. Please try again.");
-    }
     }
   };
 
