@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 import adminUserServices from "../../../services/adminUser/adminUserServices"; 
+import "./adminOrder.css";
 
 const ViewOrderDetails = () => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -15,7 +16,12 @@ const ViewOrderDetails = () => {
     try {
       const shipperData = await adminOrderServices.adminOrderDetails(orderId);
       // driverName = await adminUserServices.showUser(shipperData.driverId)
-      setDriverName(driverName)
+      if (shipperData.driverId) {
+        const driverData = await adminUserServices.showUser(shipperData.driverId);
+        setDriverName(driverData.username)
+      } else {
+        setDriverName("No Driver Assigned");
+      }
       setOrderDetails(shipperData);
     } catch (err) {
       console.log(err)
@@ -87,7 +93,7 @@ const ViewOrderDetails = () => {
     <>
 
     <div className="container mt-5">
-      <h1 className="title">Order Details</h1>
+      <h1 id="title" className="title">Order Details</h1>
       <table className="table is-striped is-hoverable">
         <thead>
           <tr>
@@ -109,7 +115,7 @@ const ViewOrderDetails = () => {
       <tbody>
         <tr>
           <td>{orderDetails.orderId}</td>
-          <td>{orderDetails.driverId}</td>
+          <td>{driverName}</td>
           <td>{orderDetails.pickupLocation}</td>
           <td>{orderDetails.dropoffLocation}</td>
           <td>{orderDetails.orderStatus}</td>
@@ -120,7 +126,7 @@ const ViewOrderDetails = () => {
           <td>{orderDetails.deliveryTime}</td>
           <td>{orderDetails.createdAt}</td>
           <td>
-            {orderDetails.orderStatus !== "completed" && (
+            {orderDetails.orderId &&orderDetails.orderStatus !== "completed" && (
           <div>
             <label htmlFor="drivers">Assign a Driver: </label>
               <select
@@ -145,11 +151,11 @@ const ViewOrderDetails = () => {
             <>
             <button id="view" className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
             {orderDetails.driverId && orderDetails.orderStatus === 'pending' ? (
-                <button className="button is-fullwidth has-background-warning" type="button" onClick={() => orderOnRoute(orderDetails.orderId)}>Update to On Route</button>
+                <button id="deliv-status" className="has-background-warning button is-fullwidth" type="button" onClick={() => orderOnRoute(orderDetails.orderId)}>Update to On Route</button>
               ) : (<></>)
               }
               {orderDetails.orderStatus === 'on_route' ?
-                (<button className="button has-background-success	 is-fullwidth" type="button" onClick={() => completedOrder(orderDetails.orderId)}> Order Delivered</button>) :
+                (<button id="deliv-status" className="button has-background-success	 is-fullwidth" type="button" onClick={() => completedOrder(orderDetails.orderId)}> Order Delivered</button>) :
                 (<></>)
               }
 
