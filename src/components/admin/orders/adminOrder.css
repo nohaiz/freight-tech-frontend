@@ -15,6 +15,11 @@
 
 }
 
+#deliv-status{
+  margin: .5cap;
+
+}
+
 .title-center {
   text-align: center;
   font-size: 2rem;
@@ -23,4 +28,24 @@
   
 }
 
+#title{
+  color: black;
+  text-align: center;
+}
 
+#table-title{
+  color: black;
+}
+
+#driverBox{
+  width: 100vh;
+}
+
+#driverBox-title{
+  text-align: center;
+  color: gray;
+}
+
+#li-title{
+  color: gray;
+}

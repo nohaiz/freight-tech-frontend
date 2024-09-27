@@ -5,7 +5,7 @@ import "./adminOrder.css";
 
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices";
 
-const AdminOrderList = () => {
+const ViewCompletedOrderList = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -16,11 +16,14 @@ const AdminOrderList = () => {
       try {
         let fetchedOrders;
         if (userId) {
-          fetchedOrders = await adminOrderServices.getOrdersByUserId(userId);  // Fetch filtered orders
+          fetchedOrders = await adminOrderServices.getOrdersByUserId(userId);  
         } else {
-          fetchedOrders = await adminOrderServices.indexOrders();  // Fetch all orders
+          fetchedOrders = await adminOrderServices.indexOrders(); 
         }
-        setOrders(fetchedOrders);
+
+        const completedOrders = fetchedOrders.filter(order => order.orderStatus === 'completed');
+        completedOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setOrders(completedOrders);
       } catch (error) {
         setError("Failed to load orders.");
       } finally {
@@ -35,21 +38,10 @@ const AdminOrderList = () => {
     navigate(`/admin/orders/${orderId}/details`);
   };
 
-  const handleDeleteOrder = async (orderId) => {
-    const confirmed = window.confirm("Are you sure you want to delete this order?");
-    if (confirmed) {
-    try {
-      await adminOrderServices.deleteOrder(orderId);
-      setOrders(orders.filter((order) => order.orderId !== orderId)); 
-    } catch (error) {
-      setErrorMessage("Failed to delete the order. Please try again.");
-    }
-    }
-  };
 
   return (
     <div className="container mt-5">
-      <h1 className="title-center">Order List {userId ? `for User ${userId}` : ""}</h1>
+      <h1 id="table-title" className="title-center">Completed Order List</h1>
       <table className="table is-striped is-hoverable">
         <thead>
           <tr>
@@ -79,20 +71,13 @@ const AdminOrderList = () => {
                 >
                   View Details
                 </button>
-                <button
-                  id="cancel"
-                  className="button is-danger ml-2"
-                  onClick={() => handleDeleteOrder(order.orderId)}
-                >
-                  Cancel Order
-                </button>
-
+                
               </td>
             </tr>
           ))
         ):(
           <tr>
-              <td>No orders found for this user.</td> 
+              <td>No orders found.</td> 
           </tr>
         )}
         </tbody>
@@ -101,4 +86,4 @@ const AdminOrderList = () => {
   );
 };
 
-export default AdminOrderList;
+export default ViewCompletedOrderList;

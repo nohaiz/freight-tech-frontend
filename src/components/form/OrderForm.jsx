@@ -94,7 +94,7 @@ const OrderForm = ({ user, formatTimestamp }) => {
   }, [distance, formData.vehicleType]);
 
   if (user.role === 'admin') {
-    if (orderId) {
+    
       useEffect(() => {
         const fetchUser = async () => {
           try {
@@ -106,7 +106,6 @@ const OrderForm = ({ user, formatTimestamp }) => {
         }
         fetchUser();
       }, [])
-    }
   }
 
   const calculateRoute = useCallback(() => {
@@ -234,6 +233,7 @@ const OrderForm = ({ user, formatTimestamp }) => {
                 <>
                   <label htmlFor="customerId">Shipper</label>
                   <select name="customerId" id="customerId" value={formData.customerId} onChange={handleChange}>
+                  <option value={"null"}>None</option>
                     {orderId && formData.customerId && (
                       <option key={formData.customerId} value={formData.customerId}>
                         {userData.find(u => u.userId === formData.customerId)?.username}

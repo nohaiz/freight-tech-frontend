@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import adminUserServices from "../../../services/adminUser/adminUserServices";
 import adminOrderServices from "../../../services/adminOrder/adminOrderServices"; 
 
-const AdminDriverList = () => {
+const ViewDriverList = () => {
   const [drivers, setDrivers] = useState([]);
   const [orders, setOrders] = useState([]); 
   const navigate = useNavigate();
@@ -28,13 +28,13 @@ const AdminDriverList = () => {
 
   const getActiveOrdersCount = (driverId) => {
     return orders.filter(
-      (order) => order.driverId === driverId && order.orderStatus !== "complete"
+      (order) => order.driverId === driverId && order.orderStatus !== "completed"
     ).length;
   };
 
   const getCompletedOrdersCount = (driverId) => {
     return orders.filter(
-      (order) => order.driverId === driverId && order.orderStatus === "complete"
+      (order) => order.driverId === driverId && order.orderStatus === "completed"
     ).length;
   };
 
@@ -80,4 +80,4 @@ const AdminDriverList = () => {
   );
 };
 
-export default AdminDriverList;
+export default ViewDriverList;
