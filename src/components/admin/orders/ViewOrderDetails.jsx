@@ -12,6 +12,8 @@ const ViewOrderDetails = () => {
   const navigate = useNavigate();
   const [driverName , setDriverName] = useState("")
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const fetchOrderDetails = async () => {
     try {
       const shipperData = await adminOrderServices.adminOrderDetails(orderId);
@@ -25,6 +27,8 @@ const ViewOrderDetails = () => {
       setOrderDetails(shipperData);
     } catch (err) {
       console.log(err)
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -36,7 +40,8 @@ const ViewOrderDetails = () => {
    
       setDrivers(driverUsers);
     } catch (err) {
-     
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,7 +131,7 @@ const ViewOrderDetails = () => {
           <td>{orderDetails.deliveryTime}</td>
           <td>{orderDetails.createdAt}</td>
           <td>
-            {orderDetails.orderId &&orderDetails.orderStatus !== "completed" && (
+            {!isLoading && orderDetails.orderId &&orderDetails.orderStatus !== "completed" && (
           <div>
             <label htmlFor="drivers">Assign a Driver: </label>
               <select
@@ -147,7 +152,7 @@ const ViewOrderDetails = () => {
               </select>
           </div>
             )}
-          {orderDetails.orderStatus !== "completed" && (
+          {!isLoading && orderDetails.orderStatus !== "completed" && (
             <>
             <button id="view" className="button is-info is-dark" onClick={assignDriver}>Assign Driver</button>
             {orderDetails.driverId && orderDetails.orderStatus === 'pending' ? (

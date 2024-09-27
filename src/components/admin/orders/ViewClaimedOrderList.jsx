@@ -32,17 +32,17 @@ const AdminClaimedOrderList = () => {
   };
 
   return (
-    <div>
-      <h1 id="title" className="title-center">Claimed Order List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title-center">Claimed Order List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
-            <th id="table-title">Customer ID</th>
-            <th id="table-title">Driver ID</th>
-            <th id="table-title">Pickup Location</th>
-            <th id="table-title">Dropoff Location</th>
-            <th id="table-title">Order Status</th>
-            <th id="table-title">Actions</th>
+            <th>Customer ID</th>
+            <th>Driver ID</th>
+            <th>Pickup Location</th>
+            <th>Dropoff Location</th>
+            <th>Order Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

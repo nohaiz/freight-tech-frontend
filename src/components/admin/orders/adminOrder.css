@@ -1,17 +1,20 @@
 #cancel{
   background-color: red;
   margin: .5cap;
+  max-width: 168px;
 }
 
 #view{
   background-color: black  ;
   margin: .5cap;
+  max-width: 168px;
 
 }
 
 #edit{
   background-color: orange   ;
   margin: .5cap;
+  max-width: 168px;
 
 }
 

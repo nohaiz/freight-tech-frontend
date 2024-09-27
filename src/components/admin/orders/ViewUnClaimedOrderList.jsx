@@ -32,26 +32,26 @@ const AdminUnclaimedOrderList = () => {
   };
 
   return (
-    <div>
-      <h1 id="table-title" className="title-center">Unclaimed Order List</h1>
-      <table>
+    <div className="container mt-5">
+      <h1 className="title-center">Unclaimed Order List</h1>
+      <table className="table is-striped is-hoverable">
         <thead>
           <tr>
-            <th id="table-title">Customer ID</th>
-            <th id="table-title">Pickup Location</th>
-            <th id="table-title">Dropoff Location</th>
-            <th id="table-title">Order Status</th>
-            <th id="table-title">Actions</th>
+            <th>Customer ID</th>
+            <th>Pickup Location</th>
+            <th>Dropoff Location</th>
+            <th>Order Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => (
             <tr key={order.orderId}>
-              <td id="table-title">{order.customerId}</td>
-              <td id="table-title">{order.pickupLocation}</td>
-              <td id="table-title">{order.dropoffLocation}</td>
-              <td id="table-title">{order.orderStatus}</td>
-              <td id="table-title">
+              <td>{order.customerId}</td>
+              <td>{order.pickupLocation}</td>
+              <td>{order.dropoffLocation}</td>
+              <td>{order.orderStatus}</td>
+              <td>
                 <button 
                 className="button is-info"
                 id="view"

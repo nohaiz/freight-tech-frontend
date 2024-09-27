@@ -77,7 +77,7 @@ const DriverOrderDetails = () => {
               <p><strong id="li-title">Verified User:</strong> {user.verifiedUser ? "Yes" : "No"}</p>
 
               {user.roles.includes('driver') && (
-                <div className="user-details">
+                <div id="driver-actions" className="user-details">
                   <p><strong id="li-title">Active Orders:</strong> {assignedOrders.filter(order => order.orderStatus !== 'completed').length}</p>
                   <p><strong id="li-title">Total Orders:</strong> {allOrders.filter(order => order.driverId === parseInt(userId)).length}</p>
                   <div>
