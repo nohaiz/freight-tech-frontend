@@ -48,11 +48,11 @@ const AdminClaimedOrderList = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.orderId}>
-              <td id="table-title">{order.customerId}</td>
-              <td id="table-title">{order.driverId}</td>
-              <td id="table-title">{order.pickupLocation}</td>
-              <td id="table-title">{order.dropoffLocation}</td>
-              <td id="table-title">{order.orderStatus}</td>
+              <td>{order.customerId}</td>
+              <td>{order.driverId}</td>
+              <td>{order.pickupLocation}</td>
+              <td>{order.dropoffLocation}</td>
+              <td>{order.orderStatus}</td>
               <td>
                 <button 
                 className="button is-info" 
