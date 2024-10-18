@@ -16,7 +16,7 @@ body {
   border-radius: 12px;
   color: white;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  width: 30%;
+  width: fit-content;
   padding: 40px;
   transform: translateY(-50px);
 }
